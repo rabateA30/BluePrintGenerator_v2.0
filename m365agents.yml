@@ -2,7 +2,7 @@
 # Blueprint Generator — Declarative Agent for M365 Copilot
 version: v1.11
 
-environmentFolderPath: ./env
+environmentFolderPath: ./
 
 # ── PROVISION ──────────────────────────────────────────────────────────────────
 provision:
