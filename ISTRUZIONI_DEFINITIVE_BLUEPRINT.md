@@ -52,24 +52,11 @@ def set_para_text(para, new_text):
 
 ### Phase 4 — Document Generation COMPLETO
 
-#### SEZIONI OBBLIGATORIE in ESPAÑOL:
+#### SEZIONI OBBLIGATORIE
 
-**1. Título Principal**: 
-```
-"Blueprint – BTP – [Nombre Proyecto] con Inteligencia Artificial"
-```
+**Lingua dell'output**: utilizzare integralmente la lingua richiesta dalla specifica/configurazione del documento tra **Italiano**, **English** o **Español**. Le intestazioni e i testi di esempio sotto riportati devono essere adattati coerentemente alla lingua selezionata.
 
-**2. Resumen Ejecutivo (4 paragrafi)**:
-- Situación Actual (AS-IS) con limitaciones específicas
-- Solución Propuesta (TO-BE) con tecnología IA
-- Beneficios Cuantificables con métricas precisas  
-- Inversión y Retorno con timeframes realistas
-
-**3. Contexto y Finalidad**:
-- **1.1 Alcance**: 1-2 frases objetivo proceso
-- **1.2 Finalidad**: 4-5 bullets objetivos específicos
-- **1.3 Perímetro**: IN SCOPE (3 items) + OUT OF SCOPE (2 items)  
-- **1.4 Restricciones Clave**: NORMATIVAS / TÉCNICAS / ORGANIZATIVAS
+**1. Título Principal / Titolo Principale / Main Title**: 
 
 #### TABLAS OBLIGATORIAS (13 totales) - TUTTE DA RIEMPIRE:
 
