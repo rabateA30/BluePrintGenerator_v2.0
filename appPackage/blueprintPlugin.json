@@ -1,0 +1,35 @@
+{
+    "$schema": "https://developer.microsoft.com/en-us/json-schemas/copilot/plugin/v2.3/schema.json",
+    "schema_version": "v2.3",
+    "name_for_human": "Blueprint Generator API",
+    "description_for_human": "API per la generazione automatica di documenti Blueprint Enel-GICT da materiali di progetto su SharePoint.",
+    "description_for_model": "Use this plugin to generate Blueprint documents from SharePoint project materials (PPTX, PDF, DOCX), check the status of a generation job, and list available projects.",
+    "namespace": "blueprintApi",
+    "functions": [
+        {
+            "name": "generateBlueprint",
+            "description": "Avvia la generazione di un documento Blueprint analizzando i file nella cartella SharePoint indicata."
+        },
+        {
+            "name": "checkBlueprintStatus",
+            "description": "Controlla lo stato di un job di generazione Blueprint tramite il job_id restituito da generateBlueprint."
+        },
+        {
+            "name": "listProjects",
+            "description": "Elenca le cartelle SharePoint disponibili con i materiali di progetto per la generazione Blueprint."
+        }
+    ],
+    "runtimes": [
+        {
+            "type": "OpenApi",
+            "auth": {
+                "type": "ApiKeyPluginVault",
+                "reference_id": "${{BLUEPRINT_API_KEY_REFERENCE_ID}}"
+            },
+            "spec": {
+                "url": "openapi.yaml"
+            },
+            "run_for_functions": ["generateBlueprint", "checkBlueprintStatus", "listProjects"]
+        }
+    ]
+}
