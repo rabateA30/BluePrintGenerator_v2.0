@@ -444,30 +444,7 @@ _, h25 = find_para(doc, "2.5 Controlli Specifici", "Heading 3")
 if h25 is None:
     _, h25 = find_para(doc, "2.5 Controlli", "Heading 3")
 
-if _ is not None:
-    # Find xxx blocks to fill
-    v_count = 0
-    campi_next = False
-    cond_next = False
-    last_sys_idx = _
-
-    for i, para in enumerate(doc.paragraphs):
-        if i <= last_sys_idx:
-            continue
-        if para.style.name.startswith("Heading 2") or para.style.name.startswith("Heading 1"):
-            break
-        txt = para.text.strip()
-        if txt == "xxx" or txt == "xxx:":
-            if v_count < len(verifiche):
-                set_para_text(para, verifiche[v_count][0])
-        elif txt == "Campi da Verificare:":
-            pass
-        elif txt == "Condizioni di Validità:":
-            pass
-        elif txt == "- xxx" and v_count < len(verifiche) and v_count >= 0:
-            pass  # handled below
-
-# Simpler approach: iterate and fill sequentially
+# Iterate and fill sequentially
 _, h25 = find_para(doc, "2.5 Controlli")
 if _ is not None:
     vi = 0  # which system
