@@ -6,14 +6,23 @@ Output language: Italian
 """
 
 import copy
+import os
+import sys
 from docx import Document
 from docx.oxml.ns import qn
 from docx.oxml import OxmlElement
 from lxml import etree
 
-TEMPLATE = r"C:\Users\A405260\Enel Spa\AI Scale Up Accelerator - Canale Grids e EGP TGX\Template Blueprint\Blueprint_1.3_enhanced.docx"
-OUTPUT   = r"C:\Users\A405260\Enel Spa\AI Scale Up Accelerator - Canale Grids e EGP TGX\NO FUTURE PROOF\EGP TGX\XX - XXX - Predictive Maintenance wind\Blueprint_PredictiveMaint_Wind.docx"
 
+def _resolve_path(cli_index, env_name, default_value):
+    """Resolve a path from CLI argument, environment variable, or a relative default."""
+    if len(sys.argv) > cli_index and sys.argv[cli_index]:
+        return sys.argv[cli_index]
+    return os.environ.get(env_name, default_value)
+
+
+TEMPLATE = _resolve_path(1, "BLUEPRINT_TEMPLATE", "Blueprint_1.3_enhanced.docx")
+OUTPUT = _resolve_path(2, "BLUEPRINT_OUTPUT", "Blueprint_PredictiveMaint_Wind.docx")
 # ── helpers ──────────────────────────────────────────────────────────────────
 
 def find_para(doc, fragment, style=None, start=0):
