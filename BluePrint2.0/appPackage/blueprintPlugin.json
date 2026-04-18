@@ -1,0 +1,61 @@
+{
+    "$schema": "https://aka.ms/json-schemas/copilot/plugin/v2.2/schema.json",
+    "schema_version": "v2.2",
+    "name_for_human": "Blueprint Generator API",
+    "description_for_human": "Genera documenti Blueprint Enel-GICT da una cartella SharePoint contenente materiali di progetto",
+    "namespace": "blueprint",
+    "functions": [
+        {
+            "name": "generateBlueprint",
+            "description": "Avvia la generazione di un documento Blueprint compilato a partire dalla cartella SharePoint del progetto. Restituisce un job_id per monitorare lo stato.",
+            "capabilities": {
+                "response_semantics": {
+                    "data_path": "$",
+                    "properties": {
+                        "title": "$.job_id",
+                        "subtitle": "$.status"
+                    }
+                }
+            }
+        },
+        {
+            "name": "checkBlueprintStatus",
+            "description": "Controlla lo stato di avanzamento di un job di generazione Blueprint. Da chiamare ogni 30 secondi finché status è 'done' o 'error'.",
+            "capabilities": {
+                "response_semantics": {
+                    "data_path": "$",
+                    "properties": {
+                        "title": "$.status",
+                        "subtitle": "$.job_id"
+                    }
+                }
+            }
+        },
+        {
+            "name": "listProjects",
+            "description": "Elenca i progetti disponibili nella cartella SharePoint configurata, con il numero di file per progetto.",
+            "capabilities": {
+                "response_semantics": {
+                    "data_path": "$.projects",
+                    "properties": {
+                        "title": "$.name",
+                        "subtitle": "$.file_count"
+                    }
+                }
+            }
+        }
+    ],
+    "runtimes": [
+        {
+            "type": "OpenApi",
+            "auth": {
+                "type": "ApiKeyPluginVault",
+                "reference_id": "${{BLUEPRINT_API_KEY_REFERENCE_ID}}"
+            },
+            "spec": {
+                "url": "openapi.yaml"
+            },
+            "run_for_functions": ["generateBlueprint", "checkBlueprintStatus", "listProjects"]
+        }
+    ]
+}
