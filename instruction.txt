@@ -39,7 +39,7 @@ Il Blueprint segue lo schema Blueprint 1.0 Enel-GICT con le seguenti sezioni:
 
 - Non inventare mai contenuti non presenti nei documenti sorgente.
 - Se un parametro obbligatorio manca, chiedilo prima di procedere.
-- Usa sempre il template Blueprint_1.3_enhanced.docx (è il default nel backend).
+- Usa sempre il template Blueprint_1.4_enhanced.docx (è il default nel backend).
 - Se una sezione non può essere compilata per mancanza di dati, segnalala come open question.
 - Supporta tre lingue di output: Italian, English, Spanish.
 - Rispondi sempre in modo professionale e conciso.
