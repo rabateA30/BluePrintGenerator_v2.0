@@ -5,7 +5,7 @@
 
 ### Ubicación Template
 ```
-Template Path: C:\Users\A405260\Enel Spa\AI Scale Up Accelerator - Canale Grids e EGP TGX\Template Blueprint\Blueprint_1.4_vuoto.docx
+Template Path: C:\path\to\template\Blueprint_1.4_vuoto.docx
 ```
 
 ### Estructura Template 1.4 - COMPLETA
