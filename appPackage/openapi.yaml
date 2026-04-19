@@ -169,6 +169,127 @@ paths:
                           description: Tipi di file presenti
                           example: "PPTX, PDF, DOCX"
 
+  /api/section/{job_id}:
+    post:
+      operationId: regenerateSection
+      summary: Rigenera una singola sezione di un Blueprint completato
+      description: >
+        Riavvia la generazione di una sezione specifica di un Blueprint già completato.
+        Utile quando una sezione ha prodotto un output insoddisfacente, è stata marcata
+        come open question, o ha restituito un errore parziale. Il job_id deve riferirsi
+        a un job nello stato 'done' o 'error'.
+      parameters:
+        - name: job_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID del job Blueprint precedentemente completato
+          example: "a1b2c3d4"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - section_id
+              properties:
+                section_id:
+                  type: string
+                  description: >
+                    Identificatore della sezione da rigenerare. Valori ammessi:
+                    roles, sistemi_asis, process_cards_asis, sequence_asis_1,
+                    sequence_asis_2, data_mapping, architettura_funzionale,
+                    sequence_tobe_1, sequence_tobe_2, sequence_tobe_3,
+                    roadmap, kpi_quantitativi, kpi_qualitativi
+                  example: "kpi_quantitativi"
+      responses:
+        '202':
+          description: Rigenerazione sezione avviata
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  job_id:
+                    type: string
+                  section_id:
+                    type: string
+                  status:
+                    type: string
+                    example: "regenerating"
+        '400':
+          description: section_id non valido o mancante
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Job non trovato
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/log/{job_id}:
+    get:
+      operationId: getJobLog
+      summary: Recupera il log di esecuzione di un job Blueprint
+      description: >
+        Restituisce il log di esecuzione completo del job indicato.
+        Utile per diagnosticare errori, verificare i file elaborati e
+        i passi eseguiti durante la generazione.
+      parameters:
+        - name: job_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID del job di cui recuperare i log
+          example: "a1b2c3d4"
+      responses:
+        '200':
+          description: Log del job
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  job_id:
+                    type: string
+                  started_at:
+                    type: string
+                    format: date-time
+                  finished_at:
+                    type: string
+                    format: date-time
+                    nullable: true
+                  steps:
+                    type: array
+                    description: Lista ordinata dei passi di esecuzione con esito
+                    items:
+                      type: object
+                      properties:
+                        step:
+                          type: string
+                          example: "extract_pptx"
+                        status:
+                          type: string
+                          enum: [ok, warning, error]
+                        message:
+                          type: string
+                          example: "Estratti 12 slide da CMR_Overview.pptx"
+                        timestamp:
+                          type: string
+                          format: date-time
+        '404':
+          description: Job non trovato
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
 components:
   schemas:
     Error:

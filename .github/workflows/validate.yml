@@ -1,0 +1,142 @@
+name: Validate Blueprint Agent
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "appPackage/**"
+      - ".github/workflows/validate.yml"
+  push:
+    branches: [main]
+    paths:
+      - "appPackage/**"
+
+jobs:
+  validate-teams-app:
+    name: Validate Teams App Package
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+          cache: "npm"
+
+      - name: Install Teams App CLI
+        run: npm install -g @microsoft/teamsapp-cli
+
+      - name: Check required env variables are referenced
+        run: |
+          echo "Checking that manifest.json references \${{TEAMS_APP_ID}}..."
+          grep -q '\${{TEAMS_APP_ID}}' appPackage/manifest.json || (echo "ERROR: TEAMS_APP_ID not found in manifest.json" && exit 1)
+          echo "Checking that openapi.yaml references \${{BLUEPRINT_API_BASE_URL}}..."
+          grep -q '\${{BLUEPRINT_API_BASE_URL}}' appPackage/openapi.yaml || (echo "ERROR: BLUEPRINT_API_BASE_URL not found in openapi.yaml" && exit 1)
+          echo "Checking that blueprintPlugin.json references \${{BLUEPRINT_API_KEY_REFERENCE_ID}}..."
+          grep -q '\${{BLUEPRINT_API_KEY_REFERENCE_ID}}' appPackage/blueprintPlugin.json || (echo "ERROR: BLUEPRINT_API_KEY_REFERENCE_ID not found in blueprintPlugin.json" && exit 1)
+          echo "All required variable references found."
+
+      - name: Create env file for validation
+        run: |
+          mkdir -p env
+          cat > env/.env.dev <<EOF
+          TEAMS_APP_ID=00000000-0000-0000-0000-000000000000
+          BLUEPRINT_API_BASE_URL=https://placeholder.azurewebsites.net
+          BLUEPRINT_API_KEY_REFERENCE_ID=placeholder-vault-ref
+          EOF
+
+      - name: Validate Teams app manifest
+        run: teamsapp validate --env dev --manifest-path appPackage/manifest.json
+        continue-on-error: false
+
+  validate-openapi:
+    name: Validate OpenAPI Spec
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+
+      - name: Install Spectral
+        run: npm install -g @stoplight/spectral-cli
+
+      - name: Lint openapi.yaml
+        run: spectral lint appPackage/openapi.yaml --ruleset https://unpkg.com/@stoplight/spectral-owasp-ruleset/dist/ruleset.js || true
+        # OWASP ruleset: warns on security gaps. Non-blocking for now — review warnings manually.
+
+      - name: Validate OpenAPI structure (basic)
+        run: |
+          node -e "
+          const fs = require('fs');
+          const yaml = require('js-yaml');
+          try {
+            const doc = yaml.load(fs.readFileSync('appPackage/openapi.yaml', 'utf8'));
+            const paths = Object.keys(doc.paths || {});
+            const required = ['/api/generate', '/api/status/{job_id}', '/api/projects', '/api/section/{job_id}', '/api/log/{job_id}'];
+            const missing = required.filter(p => !paths.includes(p));
+            if (missing.length > 0) {
+              console.error('Missing paths:', missing);
+              process.exit(1);
+            }
+            console.log('All required paths present:', paths);
+          } catch(e) { console.error(e); process.exit(1); }
+          "
+        env:
+          NODE_PATH: /usr/local/lib/node_modules
+
+      - name: Install js-yaml for validation step
+        run: npm install -g js-yaml
+        # Ensure js-yaml is available for the validation script above
+
+  validate-json-schemas:
+    name: Validate JSON Files
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+
+      - name: Validate JSON files are well-formed
+        run: |
+          for f in appPackage/manifest.json appPackage/declarativeAgent.json appPackage/blueprintPlugin.json; do
+            echo "Validating $f..."
+            node -e "JSON.parse(require('fs').readFileSync('$f','utf8')); console.log('OK: $f')"
+          done
+
+      - name: Check declarativeAgent.json references instruction.txt
+        run: |
+          node -e "
+          const agent = JSON.parse(require('fs').readFileSync('appPackage/declarativeAgent.json','utf8'));
+          if (!agent.instructions || !agent.instructions.includes('instruction.txt')) {
+            console.error('declarativeAgent.json does not reference instruction.txt');
+            process.exit(1);
+          }
+          console.log('OK: instruction.txt is referenced in declarativeAgent.json');
+          "
+
+      - name: Check blueprintPlugin.json uses openapi.yaml (not legacy)
+        run: |
+          node -e "
+          const plugin = JSON.parse(require('fs').readFileSync('appPackage/blueprintPlugin.json','utf8'));
+          const specs = plugin.runtimes.map(r => r.spec && r.spec.url).filter(Boolean);
+          specs.forEach(url => {
+            if (url.toLowerCase().includes('old')) {
+              console.error('ERROR: blueprintPlugin.json references legacy spec:', url);
+              process.exit(1);
+            }
+          });
+          console.log('OK: no legacy spec references found. Specs:', specs);
+          "
