@@ -53,7 +53,7 @@
                 "reference_id": "${{BLUEPRINT_API_KEY_REFERENCE_ID}}"
             },
             "spec": {
-                "url": "openapi.yaml"
+                "url": "openapi_OLD.yaml"
             },
             "run_for_functions": ["generateBlueprint", "checkBlueprintStatus", "listProjects"]
         }
