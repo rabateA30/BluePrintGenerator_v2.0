@@ -73,45 +73,54 @@ def generate_blueprint(req: func.HttpRequest) -> func.HttpResponse:
             "error": None,
         }
 
-    def execute():
-        try:
-            result = run_blueprint_pipeline(
-                source_folder=source_folder,
-                project_name=project_name,
-                output_language=output_language,
-                output_filename=output_filename,
-            )
-            with JOBS_LOCK:
-                JOBS[job_id].update({
-                    "status": "done",
-                    "finished_at": datetime.now(timezone.utc).isoformat(),
-                    "output_url": result["output_url"],
-                    "sections_filled": result["sections_filled"],
-                    "open_questions": result["open_questions"],
-                })
-        except Exception as exc:
-            logging.exception(f"[{job_id}] Pipeline error")
-            with JOBS_LOCK:
-                JOBS[job_id].update({
-                    "status": "error",
-                    "finished_at": datetime.now(timezone.utc).isoformat(),
-                    "error": str(exc),
-                })
-
-    threading.Thread(target=execute, daemon=True).start()
     logging.info(f"[{job_id}] Job started: project={project_name}, lang={output_language}")
 
-    return func.HttpResponse(
-        json.dumps({
-            "job_id": job_id,
-            "status": "started",
-            "message": "Blueprint generation started. Use poll_url to monitor progress.",
-            "poll_url": f"/api/status/{job_id}",
-        }),
-        status_code=202, mimetype="application/json"
-    )
+    try:
+        result = run_blueprint_pipeline(
+            source_folder=source_folder,
+            project_name=project_name,
+            output_language=output_language,
+            output_filename=output_filename,
+        )
+        with JOBS_LOCK:
+            JOBS[job_id].update({
+                "status": "done",
+                "finished_at": datetime.now(timezone.utc).isoformat(),
+                "output_url": result["output_url"],
+                "sections_filled": result["sections_filled"],
+                "open_questions": result["open_questions"],
+            })
 
+        return func.HttpResponse(
+            json.dumps({
+                "job_id": job_id,
+                "status": "done",
+                "message": "Blueprint generation completed.",
+                "poll_url": f"/api/status/{job_id}",
+                "output_url": result["output_url"],
+                "sections_filled": result["sections_filled"],
+                "open_questions": result["open_questions"],
+            }),
+            status_code=200, mimetype="application/json"
+        )
+    except Exception as exc:
+        logging.exception(f"[{job_id}] Pipeline error")
+        with JOBS_LOCK:
+            JOBS[job_id].update({
+                "status": "error",
+                "finished_at": datetime.now(timezone.utc).isoformat(),
+                "error": str(exc),
+            })
 
+        return func.HttpResponse(
+            json.dumps({
+                "job_id": job_id,
+                "status": "error",
+                "error": str(exc),
+                "poll_url": f"/api/status/{job_id}",
+            }),
+            status_code=500, mimetype="application/json"
+        )
 # ── GET /api/status/{job_id} ───────────────────────────────────────────────────
 @app.route(route="status/{job_id}", methods=["GET"])
 def check_status(req: func.HttpRequest) -> func.HttpResponse:
