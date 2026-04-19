@@ -1,0 +1,187 @@
+openapi: 3.0.0
+info:
+  title: Blueprint Generator API
+  description: API per la generazione automatica di documenti Blueprint Enel-GICT da materiali di progetto su SharePoint.
+  version: 1.0.0
+
+servers:
+  - url: https://your-blueprint-api-base-url.example.com
+    description: Azure Function App — Blueprint Generator
+
+paths:
+  /api/generate:
+    post:
+      operationId: generateBlueprint
+      summary: Avvia la generazione di un documento Blueprint
+      description: >
+        Analizza i file nella cartella SharePoint indicata (PPTX, PDF, DOCX),
+        sintetizza i contenuti utilizzando AI, compila il template Blueprint 1.3
+        e genera il documento .docx finale. L'operazione è asincrona — usa
+        checkBlueprintStatus per monitorare il completamento.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - source_folder
+                - project_name
+              properties:
+                source_folder:
+                  type: string
+                  description: Nome della cartella SharePoint contenente i materiali del progetto
+                  example: "Global - CMR Virtual Assistant"
+                project_name:
+                  type: string
+                  description: Nome del progetto (usato per il nome del file output)
+                  example: "CMR Virtual Assistant"
+                output_language:
+                  type: string
+                  enum: [Italian, English, Spanish]
+                  default: English
+                  description: Lingua di output del documento Blueprint
+                output_filename:
+                  type: string
+                  description: Nome personalizzato del file di output (opzionale)
+                  example: "Blueprint_CMR_v1.0.docx"
+      responses:
+        '202':
+          description: Job di generazione avviato con successo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  job_id:
+                    type: string
+                    description: ID univoco del job per il monitoraggio
+                    example: "a1b2c3d4"
+                  status:
+                    type: string
+                    example: "started"
+                  message:
+                    type: string
+                    example: "Blueprint generation started. Use job_id to monitor progress."
+                  poll_url:
+                    type: string
+                    example: "/api/status/a1b2c3d4"
+        '400':
+          description: Parametri mancanti o non validi
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Cartella non autorizzata
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/status/{job_id}:
+    get:
+      operationId: checkBlueprintStatus
+      summary: Controlla lo stato di un job di generazione Blueprint
+      description: Restituisce lo stato corrente del job. Quando status è 'done', include il link al file generato.
+      parameters:
+        - name: job_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID del job restituito da generateBlueprint
+          example: "a1b2c3d4"
+      responses:
+        '200':
+          description: Stato del job
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  job_id:
+                    type: string
+                  status:
+                    type: string
+                    enum: [running, done, error]
+                    description: "running = in corso, done = completato, error = errore"
+                  started_at:
+                    type: string
+                    format: date-time
+                  finished_at:
+                    type: string
+                    format: date-time
+                    nullable: true
+                  output_url:
+                    type: string
+                    description: Link SharePoint al documento Blueprint generato (solo se status = done)
+                    nullable: true
+                  sections_filled:
+                    type: integer
+                    description: Numero di sezioni compilate (solo se status = done)
+                    nullable: true
+                  open_questions:
+                    type: array
+                    description: Sezioni non compilabili per mancanza di dati (solo se status = done)
+                    items:
+                      type: string
+                    nullable: true
+                  error:
+                    type: string
+                    description: Messaggio di errore (solo se status = error)
+                    nullable: true
+        '404':
+          description: Job non trovato
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/projects:
+    get:
+      operationId: listProjects
+      summary: Elenca i progetti disponibili per la generazione Blueprint
+      description: Restituisce la lista delle cartelle SharePoint disponibili con i materiali di progetto.
+      responses:
+        '200':
+          description: Lista dei progetti disponibili
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  projects:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          description: Nome della cartella/progetto
+                          example: "Global - CMR Virtual Assistant"
+                        file_count:
+                          type: integer
+                          description: Numero di file disponibili nella cartella
+                          example: 5
+                        file_types:
+                          type: string
+                          description: Tipi di file presenti
+                          example: "PPTX, PDF, DOCX"
+
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Descrizione dell'errore
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+
+security:
+  - ApiKeyAuth: []

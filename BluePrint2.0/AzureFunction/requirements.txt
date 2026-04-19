@@ -1,0 +1,7 @@
+azure-functions
+python-docx
+pymupdf
+python-pptx
+openpyxl
+openai
+requests
