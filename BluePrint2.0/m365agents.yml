@@ -17,6 +17,17 @@ provision:
     writeToEnvironmentFile:
       teamsAppId: TEAMS_APP_ID
 
+  # Register the API key in the Copilot vault (required for ApiKeyPluginVault auth in the plugin)
+  - uses: apiKey/register
+    with:
+      name: blueprint-api-key
+      appId: ${{TEAMS_APP_ID}}
+      primaryClientSecret: ${{BLUEPRINT_API_KEY}}
+      applicableToApps: MicrosoftTeams
+      targetAudience: HomeTenant
+    writeToEnvironmentFile:
+      registrationId: BLUEPRINT_API_KEY_REFERENCE_ID
+
   # Build app package with latest env value
   - uses: teamsApp/zipAppPackage
     with:
