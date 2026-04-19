@@ -40,21 +40,16 @@ BluePrintGenerator_v2.0/
 │   ├── instruction.txt          # Prompt di sistema dell'agente
 │   ├── blueprintPlugin.json     # Plugin OpenAPI (API Actions)
 │   └── openapi.yaml             # Specifica OpenAPI 3.0 del backend
-├── AzureFunction/               # Backend Python su Azure Functions
-│   ├── function_app.py          # Entry point HTTP triggers
-│   ├── blueprint_engine.py      # Logica di generazione Blueprint
-│   ├── requirements.txt         # Dipendenze Python
-│   └── host.json                # Configurazione Azure Functions host
 ├── agents/
 │   └── ISTRUZIONI_DEFINITIVE_BLUEPRINT.md  # Logica dettagliata (riferimento)
 ├── env/                         # File .env per variabili locali (non committare)
 ├── .github/workflows/           # CI GitHub Actions
 │   └── validate.yml
 ├── m365agents.yml               # Config Teams App CLI (produzione)
+├── _archive_BluePrint2.0/       # Materiale legacy archiviato (non in produzione)
+│   └── AzureFunction/           # Backend Python (archivio — function_app.py, blueprint_engine.py, …)
 └── README.md
 ```
-
-> `_archive_BluePrint2.0/` — cartella legacy archiviata, non utilizzata in produzione.
 
 ---
 
@@ -153,7 +148,7 @@ Il plugin usa `ApiKeyPluginVault` per iniettare la chiave API senza esporla all'
 ### Azure Function locale
 
 ```bash
-cd AzureFunction
+cd _archive_BluePrint2.0/AzureFunction
 python -m venv .venv
 .venv\Scripts\activate          # Windows
 pip install -r requirements.txt

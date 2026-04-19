@@ -68,6 +68,9 @@ jobs:
       - name: Install Spectral
         run: npm install -g @stoplight/spectral-cli
 
+      - name: Install js-yaml for validation step
+        run: npm install -g js-yaml
+
       - name: Lint openapi.yaml
         run: spectral lint appPackage/openapi.yaml --ruleset https://unpkg.com/@stoplight/spectral-owasp-ruleset/dist/ruleset.js || true
         # OWASP ruleset: warns on security gaps. Non-blocking for now — review warnings manually.
@@ -91,10 +94,6 @@ jobs:
           "
         env:
           NODE_PATH: /usr/local/lib/node_modules
-
-      - name: Install js-yaml for validation step
-        run: npm install -g js-yaml
-        # Ensure js-yaml is available for the validation script above
 
   validate-json-schemas:
     name: Validate JSON Files
