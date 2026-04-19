@@ -12,6 +12,7 @@ import os
 import copy
 import io
 import logging
+import re
 import tempfile
 import requests
 from typing import Optional
@@ -447,9 +448,12 @@ def run_blueprint_pipeline(source_folder: str, project_name: str,
     # Fill each synthesized section by searching for its heading
     section_map = {s["section"]: s["content"] for s in filled_sections}
     for section_name, content in section_map.items():
-        # Search for the section heading in the document
-        short_name = section_name.split("—")[0].strip().split(".")[0].strip()
-        _, para = find_para(doc, short_name)
+        # Strip leading numeric prefix (e.g. "0. ", "1.1 ", "3.2 ") to get the
+        # meaningful title text, then search for it verbatim in the document.
+        search_name = re.sub(r"^\d+(\.\d+)*[\s.)\-–]+", "", section_name).strip()
+        if not search_name:
+            search_name = section_name.strip()
+        _, para = find_para(doc, search_name)
         if para is None:
             continue
         # Find the next paragraph after the heading and fill it
