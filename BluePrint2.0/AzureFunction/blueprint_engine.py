@@ -16,6 +16,7 @@ import re
 import tempfile
 import requests
 from typing import Optional
+from urllib.parse import urlparse
 
 # ── Third-party ────────────────────────────────────────────────────────────────
 from docx import Document
@@ -68,6 +69,25 @@ def _get_graph_token() -> str:
     return resp.json()["access_token"]
 
 
+def _build_graph_site_path(site_url: str) -> str:
+    """Convert a SharePoint site URL to the Graph API site identifier.
+
+    Microsoft Graph expects the format ``{hostname}:/sites/{sitePath}``
+    (or ``{hostname}:/{path}`` for root-site paths).  A naive
+    ``.replace('/sites/', ':')`` drops the leading slash and produces
+    an invalid identifier like ``tenant.sharepoint.com:MySite`` instead of
+    the required ``tenant.sharepoint.com:/sites/MySite``.
+    """
+    parsed = urlparse(site_url)
+    hostname = parsed.netloc  # e.g. "tenant.sharepoint.com"
+    path = parsed.path.rstrip("/")  # e.g. "/sites/MySite"
+    if not hostname:
+        raise ValueError(f"Invalid SHAREPOINT_SITE_URL — cannot parse hostname: {site_url!r}")
+    if not path or path == "/":
+        return hostname
+    return f"{hostname}:{path}"
+
+
 def _graph_get(path: str, token: str) -> dict:
     resp = requests.get(
         f"https://graph.microsoft.com/v1.0{path}",
@@ -118,8 +138,8 @@ def list_sharepoint_folders() -> list[dict]:
         ]
 
     token = _get_graph_token()
-    # Get SharePoint site id
-    site_path = SHAREPOINT_SITE_URL.replace("https://", "").replace("/sites/", ":")
+    # Get SharePoint site id — use the correct Graph identifier format
+    site_path = _build_graph_site_path(SHAREPOINT_SITE_URL)
     site_info = _graph_get(f"/sites/{site_path}", token)
     site_id = site_info["id"]
 
@@ -373,7 +393,7 @@ def run_blueprint_pipeline(source_folder: str, project_name: str,
 
     # ── Step 2: Download source files from SharePoint ─────────────────────────
     token = _get_graph_token()
-    site_path = SHAREPOINT_SITE_URL.replace("https://", "").replace("/sites/", ":")
+    site_path = _build_graph_site_path(SHAREPOINT_SITE_URL)
     site_info = _graph_get(f"/sites/{site_path}", token)
     site_id = site_info["id"]
 
