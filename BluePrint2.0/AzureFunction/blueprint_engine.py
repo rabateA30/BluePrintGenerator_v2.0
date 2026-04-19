@@ -419,13 +419,21 @@ def run_blueprint_pipeline(source_folder: str, project_name: str,
     for section_name, section_purpose in SECTIONS:
         logging.info(f"  Synthesizing: {section_name}")
         content = _synthesize_section(section_name, section_purpose, combined_content, output_language)
-        has_real_content = "[Da definire]" not in content or len(content) > 50
+        normalized_content = content.strip()
+        placeholder_variants = {
+            "[Da definire]",
+            "**[Da definire]**",
+            "*[Da definire]*",
+            "_[Da definire]_",
+            "`[Da definire]`",
+        }
+        has_real_content = bool(normalized_content) and normalized_content not in placeholder_variants
         filled_sections.append({
             "section": section_name,
             "content": content,
             "filled": has_real_content,
         })
-        if not has_real_content or content.strip() == "[Da definire]":
+        if not has_real_content:
             open_questions.append(section_name)
 
     # ── Step 5: Fill template ──────────────────────────────────────────────────
