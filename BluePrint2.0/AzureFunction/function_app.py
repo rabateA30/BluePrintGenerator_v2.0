@@ -8,7 +8,7 @@ from datetime import datetime, timezone
 
 from blueprint_engine import run_blueprint_pipeline, list_sharepoint_folders
 
-app = func.FunctionApp(http_auth_level=func.AuthLevel.FUNCTION)
+app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
 
 # ── In-memory job store ────────────────────────────────────────────────────────
 JOBS: dict = {}
