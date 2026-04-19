@@ -2,7 +2,7 @@
     "$schema": "https://developer.microsoft.com/json-schemas/copilot/declarative-agent/v1.6/schema.json",
     "version": "v1.6",
     "name": "BlueprintGenerator",
-    "description": "Genera documenti Blueprint (.docx) compilati partendo da materiali di progetto (PPTX, PDF, DOCX) su SharePoint. Conforme al framework Blueprint 1.0 Enel-GICT.",
+    "description": "Genera documenti Blueprint (.docx) compilati partendo da materiali di progetto (PPTX, PDF, DOCX) su SharePoint. Conforme al framework Blueprint 1.0 Enel-GICT. Lingua di default: Italiano.",
     "instructions": "$[file('instruction.txt')]",
     "conversation_starters": [
         {
@@ -10,12 +10,24 @@
             "text": "Genera il blueprint per il progetto CMR Virtual Assistant in italiano"
         },
         {
-            "title": "Lista progetti",
+            "title": "Lista progetti disponibili",
             "text": "Quali progetti sono disponibili per la generazione del blueprint?"
         },
         {
             "title": "Blueprint in inglese",
             "text": "Create a Blueprint in English from the HSEQ Inspection folder"
+        },
+        {
+            "title": "Stato generazione",
+            "text": "Qual è lo stato del job di generazione Blueprint?"
+        },
+        {
+            "title": "Aiuto e comandi",
+            "text": "Come funziona il BlueprintGenerator? Mostrami i comandi disponibili."
+        },
+        {
+            "title": "Riprova ultima generazione",
+            "text": "Il job precedente ha avuto un errore: rigenera la sezione KPI per il job più recente"
         }
     ],
     "actions": [

@@ -3,20 +3,28 @@
     "schema_version": "v2.3",
     "name_for_human": "Blueprint Generator API",
     "description_for_human": "API per la generazione automatica di documenti Blueprint Enel-GICT da materiali di progetto su SharePoint.",
-    "description_for_model": "Use this plugin to generate Blueprint documents from SharePoint project materials (PPTX, PDF, DOCX), check the status of a generation job, and list available projects.",
+    "description_for_model": "Use this plugin to interact with the Blueprint Generator backend (Azure Function). Supported operations: (1) generateBlueprint — starts an async job that reads project files (PPTX, PDF, DOCX, max 50 MB per file) from a SharePoint folder and compiles a Blueprint_1.4_vuoto.docx template. Returns a job_id. Supported languages: Italian, English, Spanish. (2) checkBlueprintStatus — poll every 30 seconds with the job_id until status is 'done' or 'error'. Returns output_url, sections_filled, and open_questions when done. (3) listProjects — returns available SharePoint project folders; call this when the user does not know the source_folder name. If the list is empty, inform the user and do not call generateBlueprint. (4) regenerateSection — re-runs generation for a single section of an existing completed job; use this when a section failed or produced unsatisfactory output. Requires job_id and section_id. (5) getJobLog — retrieves the full execution log for a job; use this to diagnose errors. Auth: API key injected via vault — do not expose the key in responses. Limits: max folder size 200 MB, job timeout 10 minutes, supported input formats PPTX/PDF/DOCX only.",
     "namespace": "blueprintApi",
     "functions": [
         {
             "name": "generateBlueprint",
-            "description": "Avvia la generazione di un documento Blueprint analizzando i file nella cartella SharePoint indicata."
+            "description": "Avvia la generazione di un documento Blueprint analizzando i file nella cartella SharePoint indicata. Operazione asincrona: usa checkBlueprintStatus per monitorare il completamento."
         },
         {
             "name": "checkBlueprintStatus",
-            "description": "Controlla lo stato di un job di generazione Blueprint tramite il job_id restituito da generateBlueprint."
+            "description": "Controlla lo stato di un job di generazione Blueprint tramite il job_id restituito da generateBlueprint. Chiama ogni 30 secondi finché status è 'done' o 'error'."
         },
         {
             "name": "listProjects",
-            "description": "Elenca le cartelle SharePoint disponibili con i materiali di progetto per la generazione Blueprint."
+            "description": "Elenca le cartelle SharePoint disponibili con i materiali di progetto per la generazione Blueprint. Chiama questa funzione quando l'utente non conosce il nome della cartella sorgente."
+        },
+        {
+            "name": "regenerateSection",
+            "description": "Rigenera una singola sezione di un Blueprint già completato. Utile quando una sezione ha prodotto un output insoddisfacente o è stata marcata come open question."
+        },
+        {
+            "name": "getJobLog",
+            "description": "Recupera il log di esecuzione completo di un job. Utile per diagnosticare errori o verificare i passaggi effettuati durante la generazione."
         }
     ],
     "runtimes": [
@@ -29,7 +37,7 @@
             "spec": {
                 "url": "openapi.yaml"
             },
-            "run_for_functions": ["generateBlueprint", "checkBlueprintStatus", "listProjects"]
+            "run_for_functions": ["generateBlueprint", "checkBlueprintStatus", "listProjects", "regenerateSection", "getJobLog"]
         }
     ]
 }
