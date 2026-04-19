@@ -197,12 +197,21 @@ paths:
               properties:
                 section_id:
                   type: string
-                  description: >
-                    Identificatore della sezione da rigenerare. Valori ammessi:
-                    roles, sistemi_asis, process_cards_asis, sequence_asis_1,
-                    sequence_asis_2, data_mapping, architettura_funzionale,
-                    sequence_tobe_1, sequence_tobe_2, sequence_tobe_3,
-                    roadmap, kpi_quantitativi, kpi_qualitativi
+                  description: Identificatore della sezione da rigenerare.
+                  enum:
+                    - roles
+                    - sistemi_asis
+                    - process_cards_asis
+                    - sequence_asis_1
+                    - sequence_asis_2
+                    - data_mapping
+                    - architettura_funzionale
+                    - sequence_tobe_1
+                    - sequence_tobe_2
+                    - sequence_tobe_3
+                    - roadmap
+                    - kpi_quantitativi
+                    - kpi_qualitativi
                   example: "kpi_quantitativi"
       responses:
         '202':
