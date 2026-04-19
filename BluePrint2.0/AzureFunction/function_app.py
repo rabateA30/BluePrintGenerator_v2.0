@@ -147,12 +147,21 @@ JOBS: dict = _PersistentJobStore()
 JOBS_LOCK = threading.Lock()
 
 API_KEY = os.environ.get("BLUEPRINT_API_KEY", "")
+TEAMSFX_ENV = (os.environ.get("TEAMSFX_ENV", "") or "").strip().lower()
+ALLOW_MISSING_API_KEY = (os.environ.get("BLUEPRINT_ALLOW_MISSING_API_KEY", "") or "").strip().lower() in {
+    "1", "true", "yes", "on"
+}
 
 
 def _verify_api_key(req: func.HttpRequest) -> bool:
     if not API_KEY:
-        logging.warning("BLUEPRINT_API_KEY not set — open access (dev mode)")
-        return True
+        if TEAMSFX_ENV in {"local", "dev"} or ALLOW_MISSING_API_KEY:
+            logging.warning(
+                "BLUEPRINT_API_KEY not set — allowing access only because local/dev mode or explicit bypass is enabled"
+            )
+            return True
+        logging.error("BLUEPRINT_API_KEY not set — denying access outside local/dev mode")
+        return False
     return req.headers.get("X-API-Key") == API_KEY
 
 
