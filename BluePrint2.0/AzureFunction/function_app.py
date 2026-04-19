@@ -5,13 +5,145 @@ import uuid
 import threading
 import logging
 from datetime import datetime, timezone
+from azure.core.exceptions import ResourceExistsError, ResourceNotFoundError
+from azure.storage.blob import BlobServiceClient
 
 from blueprint_engine import run_blueprint_pipeline, list_sharepoint_folders
 
-app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
+app = func.FunctionApp(http_auth_level=func.AuthLevel.FUNCTION)
 
-# ── In-memory job store ────────────────────────────────────────────────────────
-JOBS: dict = {}
+
+class _PersistentJobRecord(dict):
+    def __init__(self, initial: dict, persist_callback):
+        super().__init__(initial)
+        self._persist_callback = persist_callback
+
+    def _persist(self) -> None:
+        self._persist_callback(dict(self))
+
+    def __setitem__(self, key, value):
+        super().__setitem__(key, value)
+        self._persist()
+
+    def __delitem__(self, key):
+        super().__delitem__(key)
+        self._persist()
+
+    def clear(self):
+        super().clear()
+        self._persist()
+
+    def pop(self, key, default=None):
+        result = super().pop(key, default)
+        self._persist()
+        return result
+
+    def popitem(self):
+        result = super().popitem()
+        self._persist()
+        return result
+
+    def setdefault(self, key, default=None):
+        result = super().setdefault(key, default)
+        self._persist()
+        return result
+
+    def update(self, *args, **kwargs):
+        super().update(*args, **kwargs)
+        self._persist()
+
+
+class _PersistentJobStore(dict):
+    def __init__(self):
+        self._cache = {}
+        connection_string = (
+            os.environ.get("BLUEPRINT_JOBS_STORAGE_CONNECTION_STRING")
+            or os.environ.get("AzureWebJobsStorage", "")
+        )
+        container_name = os.environ.get("BLUEPRINT_JOBS_CONTAINER", "blueprint-jobs")
+        self._container_client = None
+
+        if connection_string:
+            blob_service_client = BlobServiceClient.from_connection_string(connection_string)
+            self._container_client = blob_service_client.get_container_client(container_name)
+            try:
+                self._container_client.create_container()
+            except ResourceExistsError:
+                pass
+        else:
+            logging.warning(
+                "No persistent storage connection string configured for jobs; "
+                "falling back to in-memory cache only."
+            )
+
+    def _blob_name(self, job_id: str) -> str:
+        return f"jobs/{job_id}.json"
+
+    def _wrap(self, job_id: str, data: dict):
+        return _PersistentJobRecord(data, lambda updated: self._save(job_id, updated))
+
+    def _save(self, job_id: str, data: dict) -> None:
+        normalized = dict(data)
+        self._cache[job_id] = normalized
+        if self._container_client is not None:
+            self._container_client.upload_blob(
+                name=self._blob_name(job_id),
+                data=json.dumps(normalized),
+                overwrite=True
+            )
+
+    def _load(self, job_id: str):
+        if job_id in self._cache:
+            return self._wrap(job_id, self._cache[job_id])
+
+        if self._container_client is None:
+            return None
+
+        try:
+            blob_client = self._container_client.get_blob_client(self._blob_name(job_id))
+            payload = blob_client.download_blob().readall()
+        except ResourceNotFoundError:
+            return None
+
+        if isinstance(payload, bytes):
+            payload = payload.decode("utf-8")
+
+        data = json.loads(payload)
+        self._cache[job_id] = data
+        return self._wrap(job_id, data)
+
+    def get(self, key, default=None):
+        job = self._load(key)
+        return default if job is None else job
+
+    def __getitem__(self, key):
+        job = self._load(key)
+        if job is None:
+            raise KeyError(key)
+        return job
+
+    def __setitem__(self, key, value):
+        self._save(key, dict(value))
+
+    def __contains__(self, key):
+        return self._load(key) is not None
+
+    def pop(self, key, default=None):
+        existing = self._load(key)
+        if existing is None:
+            return default
+
+        self._cache.pop(key, None)
+        if self._container_client is not None:
+            try:
+                self._container_client.delete_blob(self._blob_name(key))
+            except ResourceNotFoundError:
+                pass
+        return dict(existing)
+
+
+# ── Persistent job store ───────────────────────────────────────────────────────
+JOBS: dict = _PersistentJobStore()
 JOBS_LOCK = threading.Lock()
 
 API_KEY = os.environ.get("BLUEPRINT_API_KEY", "")
