@@ -74,7 +74,7 @@ Le seguenti 13 tabelle sono **tutte obbligatorie** — non lasciare nessuna tabe
 | 7 | **TO-BE Sequence (parte 1)** | Colonna **"AI+Intervento Umano"** OBBLIGATORIA |
 | 8 | **TO-BE Sequence (parte 2)** | Colonna **"AI+Intervento Umano"** OBBLIGATORIA |
 | 9 | **TO-BE Sequence (parte 3)** | Colonna **"AI+Intervento Umano"** OBBLIGATORIA |
-| 10 | **Roadmap** | 6 fasi M1-M12 con: Obiettivo + Entregable + Durata |
+| 10 | **Roadmap** | 6 fasi M1-M12 con: Obiettivo + Deliverable + Durata |
 | 11 | **KPI Quantitativi** | ≥4 KPI con: valore AS-IS + target TO-BE + % miglioramento |
 | 12 | **KPI Qualitativi** | ≥4 KPI con: target + metodo di misurazione |
 
