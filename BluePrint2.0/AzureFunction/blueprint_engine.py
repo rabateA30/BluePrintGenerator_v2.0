@@ -20,6 +20,7 @@ from typing import Optional
 from docx import Document
 from docx.oxml.ns import qn
 import fitz          # PyMuPDF
+import openpyxl
 from pptx import Presentation as PptxDoc
 from openai import AzureOpenAI
 
@@ -182,6 +183,21 @@ def _extract_pdf(content: bytes) -> str:
     return "\n\n".join(parts)
 
 
+def _extract_xlsx(content: bytes) -> str:
+    wb = openpyxl.load_workbook(io.BytesIO(content), read_only=True, data_only=True)
+    parts = []
+    for sheet in wb.worksheets:
+        rows = []
+        for row in sheet.iter_rows(values_only=True):
+            cells = [str(cell) for cell in row if cell is not None and str(cell).strip()]
+            if cells:
+                rows.append(" | ".join(cells))
+        if rows:
+            parts.append(f"[Sheet: {sheet.title}]\n" + "\n".join(rows))
+    wb.close()
+    return "\n\n".join(parts)
+
+
 def _extract_file(filename: str, content: bytes) -> str:
     ext = filename.rsplit(".", 1)[-1].lower() if "." in filename else ""
     if ext == "docx":
@@ -190,6 +206,8 @@ def _extract_file(filename: str, content: bytes) -> str:
         return _extract_pptx(content)
     if ext == "pdf":
         return _extract_pdf(content)
+    if ext == "xlsx":
+        return _extract_xlsx(content)
     return ""  # Skip unsupported formats
 
 
@@ -376,7 +394,7 @@ def run_blueprint_pipeline(source_folder: str, project_name: str,
     ]
 
     if not source_files:
-        raise ValueError(f"No supported files (PDF, PPTX, DOCX) found in folder '{source_folder}'.")
+        raise ValueError(f"No supported files (PDF, PPTX, DOCX, XLSX) found in folder '{source_folder}'.")
 
     # ── Step 3: Extract content ────────────────────────────────────────────────
     logging.info(f"Extracting content from {len(source_files)} files...")
