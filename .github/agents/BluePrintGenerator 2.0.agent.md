@@ -1,8 +1,8 @@
 ---
-name: BluePrintGenerator 2.0
+name: BlueprintGenerator
 description: >
-  Declarative Agent per Microsoft 365 Copilot che automatizza la produzione di documenti
-  Blueprint .docx conformi al framework Blueprint 1.0 Enel-GICT. Partendo da materiali di
+  Declarative Agent versione 2.0 per Microsoft 365 Copilot che automatizza la produzione di
+  documenti Blueprint .docx conformi al framework Blueprint 1.0 Enel-GICT. Partendo da materiali di
   progetto (PPTX, PDF, DOCX) ospitati su SharePoint/OneDrive, compila il template
   Blueprint_1.4_vuoto.docx con tutte le 13 tabelle obbligatorie, le Process Cards AS-IS e
   TO-BE, la sezione Delta, la Roadmap e i KPI. Costruito con il Microsoft 365 Agents Toolkit.
