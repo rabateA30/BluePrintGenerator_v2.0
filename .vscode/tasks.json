@@ -9,7 +9,7 @@
       "isBackground": true,
       "dependsOn": "pip install (functions)",
       "options": {
-        "cwd": "${workspaceFolder}/_archive_BluePrint2.0\\AzureFunction"
+        "cwd": "${workspaceFolder}/_archive_BluePrint2.0/AzureFunction"
       }
     },
     {
@@ -26,7 +26,7 @@
       },
       "problemMatcher": [],
       "options": {
-        "cwd": "${workspaceFolder}/_archive_BluePrint2.0\\AzureFunction"
+        "cwd": "${workspaceFolder}/_archive_BluePrint2.0/AzureFunction"
       }
     }
   ]
