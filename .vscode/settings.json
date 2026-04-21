@@ -1,5 +1,5 @@
 {
-    "azureFunctions.deploySubpath": "_archive_BluePrint2.0\\AzureFunction",
+    "azureFunctions.deploySubpath": "_archive_BluePrint2.0/AzureFunction",
     "azureFunctions.scmDoBuildDuringDeployment": true,
     "azureFunctions.pythonVenv": ".venv",
     "azureFunctions.projectLanguage": "Python",
