@@ -1,7 +1,7 @@
 """
 Blueprint Generator – PyroguardIAn & SolarEyes
 Progetto: IT - BTP - PyroguardIAn - SolarEyes
-Business Unit: EGP TGX (Enel Green Power – Technology and GrideXpansion)
+Business Unit: EGP TGX (Enel Green Power – Technology and Grid eXpansion)
 Fonte materiale: EGP TGX\\IT - BTP -PyroguardIAn - SolarEyes
 Template: Blueprint_1.4_vuoto.docx
 Output language: Italian
@@ -199,7 +199,7 @@ for i, para in enumerate(doc.paragraphs):
             set_para_text(para,
                 "- Automatizzare l'ispezione visiva dei pannelli fotovoltaici tramite analisi AI di "
                 "immagini drone (modulo SolarEyes), riducendo la dipendenza da campagne manuali "
-                "semestral/annuali e abbattendo il costo di ispezione per MW.")
+                "semestrali/annuali e abbattendo il costo di ispezione per MW.")
         elif count == 2:
             set_para_text(para,
                 "- Ottimizzare la pianificazione degli interventi manutentivi basandosi su anomalie "
