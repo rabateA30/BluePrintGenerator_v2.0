@@ -16,7 +16,8 @@ argument-hint: >
   al nome del file di output. Esempi:
   - "Genera il blueprint per il progetto CMR Virtual Assistant dalla cartella 'Global - CMR'"
   - "Qual è lo stato del job abc123?"
-  - "Rigenera la sezione KPI del job abc123"
+  - "Rigenera la sezione kpi_quantitativi del job abc123"
+  - "Rigenera la sezione kpi_qualitativi del job abc123"
   - "Elenca i progetti disponibili"
 tools: ['vscode', 'read', 'search', 'web']
 ---
@@ -45,6 +46,8 @@ Conferma sempre i parametri con l'utente prima di avviare la generazione.
 2. Chiama `checkBlueprintStatus` ogni 30 secondi finché `status` = `"done"` o `"error"`
 3. A completamento comunica: link al .docx, numero sezioni compilate, open questions in JSON strutturato
 4. Se `listProjects` torna vuoto, mostra il messaggio di fallback e non avviare la generazione
+5. Per `regenerateSection`, usa sempre un `section_id` esplicito e conforme all'enum API
+6. Se l'utente chiede genericamente "Rigenera la sezione KPI", non chiamare subito l'API: chiedi se intende `kpi_quantitativi` oppure `kpi_qualitativi`, poi procedi con `regenerateSection`
 
 ### Azioni API disponibili
 | Azione | Endpoint | Scopo |
@@ -52,8 +55,14 @@ Conferma sempre i parametri con l'utente prima di avviare la generazione.
 | `generateBlueprint` | POST `/api/generate` | Avvia job asincrono |
 | `checkBlueprintStatus` | GET `/api/status/{job_id}` | Monitora avanzamento |
 | `listProjects` | GET `/api/projects` | Elenca cartelle disponibili |
-| `regenerateSection` | POST `/api/section/{job_id}` | Rigenera sezione singola |
+| `regenerateSection` | POST `/api/section/{job_id}` | Rigenera sezione singola; richiede `section_id` esplicito |
 | `getJobLog` | GET `/api/log/{job_id}` | Scarica log di esecuzione |
+
+Per la rigenerazione KPI, i `section_id` supportati sono:
+- `kpi_quantitativi`
+- `kpi_qualitativi`
+
+Non usare il valore generico "KPI" come `section_id`: se l'utente dice solo "KPI", chiedi sempre quale dei due KPI vuole rigenerare.
 
 ## Struttura prodotta — 13 Tabelle Obbligatorie
 
