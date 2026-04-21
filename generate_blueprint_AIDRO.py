@@ -180,9 +180,10 @@ for i, para in enumerate(doc.paragraphs):
 
 # ── 1.2 FINALITA' ─────────────────────────────────────────────────────────────
 _, h12 = find_para(doc, "1.2 Finalit", "Heading 3")
+finalita_start = _ if _ is not None else 0
 count = 0
 for i, para in enumerate(doc.paragraphs):
-    if i <= _:
+    if i <= finalita_start:
         continue
     if para.style.name == "Heading 3":
         break
