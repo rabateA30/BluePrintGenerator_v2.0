@@ -477,7 +477,7 @@ rows_c = [
      "con quali strumenti e con quale frequenza]",
      "Referente O&M / Management",
      "Registro penali aggiornato",
-     "Report periodicoper management",
+     "Report periodico per management",
      "Excel / [INFO: strumento di reporting]"),
     ("C6",
      "Monitoraggio dei KPI contrattuali (availability, PR, curtailment) "
