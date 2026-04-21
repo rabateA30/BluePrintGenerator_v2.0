@@ -209,6 +209,8 @@ for i, para in enumerate(doc.paragraphs):
 # ── 1.3 PERIMETRO ─────────────────────────────────────────────────────────────
 _, h13 = find_para(doc, "1.3 Perimetro", "Heading 3")
 h13_idx = _
+if h13_idx is None:
+    raise ValueError("Sezione '1.3 Perimetro' non trovata nel template.")
 in_scope_count = 0
 out_scope_count = 0
 in_out_mode = None
