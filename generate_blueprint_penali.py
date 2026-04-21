@@ -48,8 +48,9 @@ def _resolve_path(cli_index, env_name, default_value):
 
 
 TEMPLATE = _resolve_path(1, "BLUEPRINT_TEMPLATE", "Blueprint_1.4_vuoto.docx")
+OUTPUT_DIR = "Bluedraft"
 OUTPUT   = _resolve_path(2, "BLUEPRINT_OUTPUT",
-                         os.path.join("Bluedraft", "Blueprint_Penali_OM.docx"))
+                         os.path.join(OUTPUT_DIR, "Blueprint_Penali_OM.docx"))
 
 
 # ── helpers ───────────────────────────────────────────────────────────────────
