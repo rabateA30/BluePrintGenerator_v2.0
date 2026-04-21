@@ -2,8 +2,23 @@
 Blueprint Generator – IT O&M Gestione Penali (EGP TGX)
 Progetto:  IT - O&M - Gestione Penali — EGP TGX Italia
 Template:  Blueprint_1.4_vuoto.docx
-Output:    Blueprint_Penali_OM.docx
+Output:    Bluedraft/Blueprint_Penali_OM.docx
 Lingua:    Italiano
+
+Template table layout (Blueprint_1.4_vuoto.docx):
+  Table  0 – Stakeholders / Roles       (3 cols, 7 data rows)
+  Table  1 – Sistemi AS-IS              (3 cols, 6 data rows)
+  Table  2 – AS-IS Sequence A           (6 cols, 4 data rows)
+  Table  3 – AS-IS Sequence B           (6 cols, 4 data rows)
+  Table  4 – AS-IS Sequence C           (6 cols, 2 data rows)
+  Table  5 – Data Mapping               (5 cols, 6 data rows)
+  Table  6 – Architettura Funzionale    (4 cols, 7 data rows)
+  Table  7 – TO-BE Sequence A           (7 cols, 3 data rows)
+  Table  8 – TO-BE Sequence B           (7 cols, 3 data rows)
+  Table  9 – TO-BE Sequence C           (7 cols, 2 data rows)
+  Table 10 – Roadmap                    (4 cols, 6 data rows)
+  Table 11 – KPI Quantitativi           (4 cols, 4 data rows)
+  Table 12 – KPI Qualitativi            (3 cols, 4 data rows)
 
 NOTA: il materiale sorgente si trova nella cartella SharePoint
       "IT - O&M - Gestione Penali" (canale Grids e EGP TGX).
@@ -33,7 +48,8 @@ def _resolve_path(cli_index, env_name, default_value):
 
 
 TEMPLATE = _resolve_path(1, "BLUEPRINT_TEMPLATE", "Blueprint_1.4_vuoto.docx")
-OUTPUT   = _resolve_path(2, "BLUEPRINT_OUTPUT",   "Blueprint_Penali_OM.docx")
+OUTPUT   = _resolve_path(2, "BLUEPRINT_OUTPUT",
+                         os.path.join("Bluedraft", "Blueprint_Penali_OM.docx"))
 
 
 # ── helpers ───────────────────────────────────────────────────────────────────
@@ -290,8 +306,48 @@ if porg_val:
         "change management per l'adozione del sistema da parte del team penali.]")
 
 
-# ── TABLE 0 – SISTEMI COINVOLTI AS-IS ────────────────────────────────────────
+# ── TABLE 0 – STAKEHOLDER / ROLES ────────────────────────────────────────────
+# Cols: Ruolo | Nome / Unità Org. | Responsabilità  (7 data rows)
 t0 = doc.tables[0]
+stakeholders = [
+    ("Business Owner",
+     "[INFO RICHIESTA AL BSN: indicare nome e unita' organizzativa del "
+     "Business Owner del progetto Gestione Penali O&M EGP TGX]",
+     "Valida i requisiti funzionali, approva il Blueprint e le decisioni di business; "
+     "responsabile del valore economico del progetto (riduzione penali pagate)"),
+    ("Data Owner",
+     "[INFO RICHIESTA: indicare il responsabile dei dati SCADA/PI, contratti e "
+     "registro penali – es. responsabile dati O&M EGP TGX Italia]",
+     "Garantisce qualita', accessibilita' e governance dei dati operativi (SCADA/PI), "
+     "contrattuali e del registro storico delle penali"),
+    ("IT Owner",
+     "[INFO RICHIESTA: indicare il responsabile IT – es. GICT / Digital Infrastructure EGP]",
+     "Supervisiona l'architettura tecnica, l'integrazione con SAP/SCADA/PI e la "
+     "conformita' agli standard IT Enel; gestisce gli accessi API ai sistemi sorgente"),
+    ("Product Owner",
+     "[INFO RICHIESTA: indicare il Product Owner – es. AISA Factory EGP TGX]",
+     "Gestisce il backlog e coordina le iterazioni di sviluppo; punto di contatto "
+     "tra il team di sviluppo AI e il Business Owner"),
+    ("Referente O&M Penali",
+     "[INFO RICHIESTA: indicare il referente operativo del team penali EGP TGX Italia]",
+     "Utente principale del sistema: revisiona le analisi AI, approva le contestazioni "
+     "tramite Dashboard HITL, gestisce il contenzioso con i committenti"),
+    ("Responsabile Legale / Contratti",
+     "[INFO RICHIESTA: indicare il responsabile legale o dei contratti EGP TGX]",
+     "Revisiona le bozze di contestazione per gli importi piu' rilevanti; garantisce "
+     "conformita' delle contestazioni alle clausole contrattuali e alla normativa"),
+    ("[INFO: ulteriori ruoli specifici del progetto]",
+     "[INFO: nome e unita' organizzativa]",
+     "[INFO: responsabilita' specifica]"),
+]
+for i, row_data in enumerate(stakeholders):
+    if i + 1 < len(t0.rows):
+        fill_row(t0, i + 1, list(row_data))
+
+
+# ── TABLE 1 – SISTEMI COINVOLTI AS-IS ────────────────────────────────────────
+# Cols: Sistema | Ruolo | Tipologia  (6 data rows)
+t1 = doc.tables[1]
 systems = [
     ("SAP / ERP Contratti e Contabilita'",
      "[INFO RICHIESTA ALL'IT OWNER: descrivere il modulo SAP utilizzato per la gestione "
@@ -321,9 +377,9 @@ systems = [
      "e per l'invio delle contestazioni documentate",
      "Communication (email)"),
 ]
-for i, (s, r, t) in enumerate(systems):
-    if i + 1 < len(t0.rows):
-        fill_row(t0, i + 1, [s, r, t])
+for i, (s, r, tp) in enumerate(systems):
+    if i + 1 < len(t1.rows):
+        fill_row(t1, i + 1, [s, r, tp])
 
 
 # ── AS-IS SOTTO-PROCESSI LABEL ────────────────────────────────────────────────
@@ -338,8 +394,9 @@ if pc:
     set_para_text(pc, "Sotto-processo C: Gestione Contenzioso, Chiusura e Monitoraggio KPI Penali")
 
 
-# ── TABLE 1 – AS-IS Sotto-processo A ─────────────────────────────────────────
-t1 = doc.tables[1]
+# ── TABLE 2 – AS-IS Sotto-processo A ─────────────────────────────────────────
+# Cols: Step | Attività | Attore | Input | Output | Sistemi  (4 data rows)
+t2 = doc.tables[2]
 rows_a = [
     ("A1",
      "Ricezione della notifica di penale via email da parte del committente/TSO/DSO; "
@@ -371,28 +428,15 @@ rows_a = [
      "Notifica penale classificata",
      "Contratto e clausole penali identificati",
      "[INFO: sistema documentale contratti]"),
-    ("A5",
-     "Valutazione preliminare della plausibilita' della penale "
-     "in base all'esperienza del referente O&M",
-     "Referente O&M",
-     "Contratto e notifica penale",
-     "Prima valutazione di congruita' (accettare / approfondire / contestare)",
-     "Email / Excel"),
-    ("A6",
-     "[INFO RICHIESTA: descrivere il processo di escalation in caso di penali "
-     "di importo elevato – soglie di escalation, figure coinvolte (management, legale)]",
-     "Referente O&M / Management",
-     "Prima valutazione",
-     "Decisione su iter da seguire",
-     "[INFO: canale di escalation]"),
 ]
 for i, row_data in enumerate(rows_a):
-    if i + 1 < len(t1.rows):
-        fill_row(t1, i + 1, list(row_data))
+    if i + 1 < len(t2.rows):
+        fill_row(t2, i + 1, list(row_data))
 
 
-# ── TABLE 2 – AS-IS Sotto-processo B ─────────────────────────────────────────
-t2 = doc.tables[2]
+# ── TABLE 3 – AS-IS Sotto-processo B ─────────────────────────────────────────
+# Cols: Step | Attività | Attore | Input | Output | Sistemi  (4 data rows)
+t3 = doc.tables[3]
 rows_b = [
     ("B1",
      "Estrazione manuale dei dati di produzione/disponibilita' dell'impianto "
@@ -424,80 +468,37 @@ rows_b = [
      "Ricalcolo + documentazione tecnica",
      "Bozza lettera contestazione con allegati",
      "[INFO: strumento di redazione]"),
-    ("B5",
-     "[INFO RICHIESTA: specificare i controlli di qualita' applicati alla "
-     "contestazione prima dell'invio – revisione legale obbligatoria, soglie importo, "
-     "approvazione management]",
-     "[INFO: attore di approvazione]",
-     "Bozza contestazione",
-     "Contestazione approvata",
-     "[INFO: processo di approvazione]"),
 ]
 for i, row_data in enumerate(rows_b):
-    if i + 1 < len(t2.rows):
-        fill_row(t2, i + 1, list(row_data))
-
-
-# ── TABLE 3 – AS-IS Sotto-processo C ─────────────────────────────────────────
-t3 = doc.tables[3]
-rows_c = [
-    ("C1",
-     "Invio della contestazione via email al committente/TSO "
-     "entro il termine contrattuale previsto",
-     "Referente O&M",
-     "Contestazione approvata",
-     "Contestazione inviata e protocollata",
-     "Email"),
-    ("C2",
-     "[INFO RICHIESTA: descrivere il processo di follow-up del contenzioso – "
-     "come viene tracciato lo stato (es. in attesa risposta, accettata, rifiutata, "
-     "negoziazione in corso)? Esiste un registro aggiornato o e' gestito via email?]",
-     "Referente O&M",
-     "Contestazione inviata",
-     "Stato contenzioso tracciato",
-     "Email / Excel / [INFO: sistema ticketing]"),
-    ("C3",
-     "Gestione delle risposte del committente: accettazione della contestazione "
-     "(storno penale), rifiuto con motivazione, proposta di accordo parziale",
-     "Referente O&M / Legale",
-     "Risposta committente",
-     "Decisione su chiusura o proseguimento contenzioso",
-     "Email"),
-    ("C4",
-     "[INFO RICHIESTA: descrivere il processo di chiusura della penale – "
-     "come viene aggiornato il sistema SAP/ERP in caso di storno? "
-     "Chi autorizza il pagamento in caso di penale accettata?]",
-     "Referente O&M / Finance",
-     "Esito contenzioso",
-     "Penale chiusa (stornata o pagata) nel sistema",
-     "SAP / ERP"),
-    ("C5",
-     "[INFO RICHIESTA: specificare se esiste un reporting periodico sulle penali "
-     "gestite (es. report mensile management) e chi lo predispone, "
-     "con quali strumenti e con quale frequenza]",
-     "Referente O&M / Management",
-     "Registro penali aggiornato",
-     "Report periodico per management",
-     "Excel / [INFO: strumento di reporting]"),
-    ("C6",
-     "Monitoraggio dei KPI contrattuali (availability, PR, curtailment) "
-     "per prevenire l'insorgenza di nuove penali nel periodo successivo",
-     "Referente O&M",
-     "Dati SCADA / report operativi",
-     "Allerta su impianti a rischio penale nel periodo corrente",
-     "[INFO: SCADA / sistema PI / Excel]"),
-    ("C7",
-     "[INFO RICHIESTA: descrivere come vengono identificate e implementate "
-     "le azioni correttive per gli impianti che hanno generato penali ripetute – "
-     "chi decide, quali sistemi vengono coinvolti, come si chiude il loop]",
-     "[INFO: attori coinvolti]",
-     "Analisi cause penale + KPI impianto",
-     "Piano azioni correttive",
-     "[INFO: sistema O&M / ERP]"),
-]
-for i, row_data in enumerate(rows_c):
     if i + 1 < len(t3.rows):
         fill_row(t3, i + 1, list(row_data))
+
+
+# ── TABLE 4 – AS-IS Sotto-processo C ─────────────────────────────────────────
+# Cols: Step | Attività | Attore | Input | Output | Sistemi  (2 data rows)
+t4 = doc.tables[4]
+rows_c = [
+    ("C1",
+     "Invio della contestazione via email al committente/TSO entro il termine "
+     "contrattuale previsto; protocollazione dell'invio e tracciamento dello stato "
+     "del contenzioso (in attesa risposta, accettata, rifiutata, negoziazione in corso)",
+     "Referente O&M",
+     "Contestazione approvata",
+     "Contestazione inviata e protocollata; stato contenzioso tracciato",
+     "Email / Excel / [INFO: sistema ticketing]"),
+    ("C2",
+     "[INFO RICHIESTA: descrivere il processo di chiusura della penale dopo la risposta "
+     "del committente (storno SAP/ERP o pagamento), il monitoraggio dei KPI contrattuali "
+     "per prevenire nuove penali e come vengono identificate le azioni correttive "
+     "per gli impianti con penali ripetute]",
+     "Referente O&M / Finance",
+     "Risposta committente + dati KPI impianto",
+     "Penale chiusa nel sistema SAP/ERP; allerta impianti a rischio penale",
+     "SAP / ERP / SCADA / [INFO: strumento di reporting]"),
+]
+for i, row_data in enumerate(rows_c):
+    if i + 1 < len(t4.rows):
+        fill_row(t4, i + 1, list(row_data))
 
 
 # ── PROCESS CARDS AS-IS ───────────────────────────────────────────────────────
@@ -614,8 +615,9 @@ if p:
         "e il monitoraggio preventivo dei KPI non e' sistematico")
 
 
-# ── TABLE 4 – DATA MAPPING ────────────────────────────────────────────────────
-t4 = doc.tables[4]
+# ── TABLE 5 – DATA MAPPING ────────────────────────────────────────────────────
+# Cols: Dato | Sistema Sorgente | Sistema Destinazione | Formato | Note  (6 data rows)
+t5 = doc.tables[5]
 data_mapping = [
     ("Notifiche di penale (tipo, importo, periodo di riferimento, impianto)",
      "Email committente / TSO / ARERA",
@@ -644,81 +646,71 @@ data_mapping = [
      "[INFO: SCADA / sistema reporting operativo]",
      "Penalty Monitor Agent / Dashboard HITL",
      "CSV / REST API",
-     "[INFO: specificare frequenza di aggiornamento dei KPI operativi e soglie contrattuali]"),
-    ("Ordini di lavoro e interventi manutenzione (correlazione penale-evento tecnico)",
-     "SAP / ERP Manutenzione",
-     "Dispute Generator Agent / Knowledge Agent",
-     "JSON / API SAP",
-     "[INFO RICHIESTA: specificare se esiste l'integrazione tra OdL di manutenzione "
-     "e registrazione cause penale (es. penale availability causata da fermo manutenzione programmata)]"),
-    ("Risposte committente (accettazione/rifiuto contestazione)",
-     "Email committente",
-     "Registro Penali / Dashboard HITL",
-     "Email / PDF",
-     "[INFO: specificare se le risposte arrivano via email libera o tramite portale strutturato]"),
-    ("Dati meteorologici e curtailment TSO",
-     "[INFO: fonte dati meteo / log curtailment TSO]",
-     "Calculation Verifier Agent",
-     "CSV / API REST",
-     "[INFO RICHIESTA: rilevante per penali di availability/PR – specificare la fonte "
-     "dei dati di curtailment TSO e meteo utilizzata per le exclusion clause]"),
+     "[INFO: specificare frequenza aggiornamento KPI operativi e soglie contrattuali]"),
+    ("Risposte committente (accettazione/rifiuto contestazione) e dati meteo/curtailment TSO",
+     "Email committente / [INFO: fonte dati meteo / log curtailment TSO]",
+     "Registro Penali / Calculation Verifier Agent",
+     "Email / PDF / CSV",
+     "[INFO RICHIESTA: specificare la fonte dei dati di curtailment TSO e meteo "
+     "per le exclusion clause; indicare se le risposte del committente arrivano via email "
+     "libera o tramite portale strutturato]"),
 ]
 for i, row_data in enumerate(data_mapping):
-    if i + 1 < len(t4.rows):
-        fill_row(t4, i + 1, list(row_data))
+    if i + 1 < len(t5.rows):
+        fill_row(t5, i + 1, list(row_data))
 
 
-# ── TABLE 5 – ARCHITETTURA FUNZIONALE TO-BE ───────────────────────────────────
-t5 = doc.tables[5]
+# ── TABLE 6 – ARCHITETTURA FUNZIONALE TO-BE ───────────────────────────────────
+# Cols: Componente | Funzione | Tecnologia/Metodo | Common Agent  (7 data rows)
+t6 = doc.tables[6]
 arch_rows = [
     ("Orchestrator Agent",
      "Coordina il flusso end-to-end tra gli agenti specializzati; gestisce l'interfaccia "
      "HITL con il referente O&M; consolida le analisi e presenta le raccomandazioni per "
      "la decisione di accettare o contestare la penale",
-     "LLM multi-agent orchestration (LangGraph / AutoGen)"),
+     "LLM multi-agent orchestration (LangGraph / AutoGen)",
+     "No – specifico processo penali"),
     ("Penalty Classifier Agent",
      "Acquisisce e classifica automaticamente le notifiche di penale per tipologia "
      "(availability, PR, curtailment, SLA fornitore), impianto, committente e periodo; "
      "registra nel sistema centralizzato e allerta il referente O&M",
-     "LLM NLP classification + document parsing (GPT-4o / [INFO: modello selezionato])"),
+     "LLM NLP classification + document parsing (GPT-4o / [INFO: modello selezionato])",
+     "No – specifico processo penali"),
     ("Calculation Verifier Agent",
-     "Verifica automaticamente la correttezza del calcolo della penale: "
-     "estrae i dati di produzione/disponibilita' dal SCADA/PI, applica la formula "
-     "contrattuale, confronta con il valore notificato e quantifica la discrepanza",
-     "Formula engine + LLM reasoning + API SCADA/PI"),
+     "Verifica automaticamente la correttezza del calcolo della penale: estrae i dati di "
+     "produzione/disponibilita' dal SCADA/PI, applica la formula contrattuale, confronta con "
+     "il valore notificato e quantifica la discrepanza; applica exclusion clause automaticamente",
+     "Formula engine + LLM reasoning + API SCADA/PI",
+     "No – specifico processo penali"),
     ("Dispute Generator Agent",
      "Genera automaticamente la bozza di lettera di contestazione con allegati tecnici "
      "(dati SCADA, calcolo rielaborato, log eventi, exclusion clause applicate); "
      "la bozza viene presentata al referente O&M per revisione e approvazione HITL",
-     "LLM text generation + document assembly (GPT-4o + template contrattuale)"),
+     "LLM text generation + document assembly (GPT-4o + template contrattuale)",
+     "No – specifico processo penali"),
     ("Penalty Monitor Agent",
      "Monitora proattivamente i KPI contrattuali (availability, performance ratio, "
-     "curtailment) per tutti gli impianti in scope; genera alert predittivi "
-     "quando un impianto si avvicina alle soglie di penale contrattuali",
-     "Rule-based monitoring + ML trend forecasting + LLM alert generation"),
+     "curtailment) per tutti gli impianti in scope; genera alert predittivi quando "
+     "un impianto si avvicina alle soglie di penale contrattuali",
+     "Rule-based monitoring + ML trend forecasting + LLM alert generation",
+     "Potenzialmente riusabile cross-progetto O&M"),
     ("Knowledge Agent",
      "Recupera e sintetizza informazioni da contratti (clausole penali, exclusion clause), "
      "storico penali gestite, casi di contestazione vinti/persi, procedure O&M; "
      "supporta il Calculation Verifier e il Dispute Generator con contesto specifico",
-     "RAG + Vector DB (Azure AI Search / Qdrant) + LLM"),
-    ("ETL Pipeline",
-     "Acquisisce e normalizza dati da SCADA/PI, SAP/ERP, piattaforma documentale, "
-     "email notifiche (con OCR/parsing per PDF); alimenta gli agenti AI con dati strutturati",
-     "Azure Data Factory / [INFO: piattaforma dati Enel] + document parser"),
-    ("Dashboard HITL (TO-BE)",
-     "Interfaccia per il referente O&M: revisione classificazione penale, validazione "
-     "ricalcolo, approvazione contestazione, tracking stato contenzioso, "
-     "monitoraggio KPI portfolio impianti",
-     "Power BI Embedded / React / Teams Bot; [INFO: preferenza del team EGP TGX]"),
-    ("HITL Validation Module",
-     "Gestisce il workflow di approvazione umana prima dell'invio di qualsiasi "
-     "contestazione (obbligo HITL per ogni azione verso committente/TSO); "
-     "traccia audit log completo di tutte le decisioni",
-     "Power Automate / workflow engine; [INFO: integrazione con SAP esistente]"),
+     "RAG + Vector DB (Azure AI Search / Qdrant) + LLM",
+     "Si – pattern RAG comune ad altri progetti AI"),
+    ("ETL Pipeline + Dashboard HITL",
+     "ETL: acquisisce e normalizza dati da SCADA/PI, SAP/ERP, piattaforma documentale, "
+     "email notifiche (OCR/parsing per PDF). "
+     "Dashboard: interfaccia HITL per revisione classificazione, validazione ricalcolo, "
+     "approvazione contestazione, tracking contenzioso, monitoraggio KPI portfolio",
+     "Azure Data Factory + document parser / Power BI Embedded + React + Teams Bot",
+     "ETL: Si – infrastruttura comune; Dashboard: No – specifica dominio penali"),
 ]
 for i, row_data in enumerate(arch_rows):
-    if i + 1 < len(t5.rows):
-        fill_row(t5, i + 1, list(row_data))
+    if i + 1 < len(t6.rows):
+        fill_row(t6, i + 1, list(row_data))
 
 
 # ── TO-BE SOTTO-PROCESSI LABEL ────────────────────────────────────────────────
@@ -736,211 +728,115 @@ if p:
         "Sotto-processo C: Gestione Contenzioso, Monitoraggio Preventivo e Feedback Loop (TO-BE)")
 
 
-# ── TABLE 6 – TO-BE Sotto-processo A ──────────────────────────────────────────
-t6 = doc.tables[6]
+# ── TABLE 7 – TO-BE Sotto-processo A ──────────────────────────────────────────
+# Cols: Step|Attività|Attore|Input|Output|Sistemi|AI  (3 data rows)
+t7 = doc.tables[7]
 rows_tobe_a = [
     ("A1",
-     "ETL Pipeline monitora la casella email dedicata (o portale committente) "
-     "e acquisisce automaticamente le notifiche di penale; le normalizza in formato strutturato",
-     "ETL Pipeline (automatico)",
+     "ETL Pipeline monitora la casella email dedicata (o portale committente) e acquisisce "
+     "automaticamente le notifiche di penale; Penalty Classifier Agent le classifica per "
+     "tipologia, impianto, committente e importo; registra nel sistema centralizzato e "
+     "allerta il referente O&M su Dashboard/Teams",
+     "ETL Pipeline + Penalty Classifier Agent",
      "Email/notifica penale (PDF, email, portale)",
-     "Notifica strutturata acquisita nel sistema",
-     "Email gateway, [INFO: portale committente/TSO]",
-     "Document parsing + OCR per PDF non strutturati; alert su acquisizione fallita"),
-    ("A2",
-     "Penalty Classifier Agent classifica la notifica per tipologia, impianto, "
-     "committente, periodo di riferimento e importo; registra nel sistema centralizzato "
-     "e allerta il referente O&M su Dashboard/Teams",
-     "Penalty Classifier Agent",
-     "Notifica strutturata",
      "Penale classificata e registrata; alert referente O&M",
-     "Registro centralizzato, Teams Bot",
-     "LLM NLP classification con confidence score; alert immediato su Team"),
+     "Email gateway, [INFO: portale committente/TSO], Registro centralizzato",
+     "Document parsing + OCR; LLM NLP classification con confidence score; alert Teams"),
+    ("A2",
+     "Calculation Verifier Agent estrae automaticamente i dati di produzione dal "
+     "SCADA/PI; Knowledge Agent recupera clausole penali ed exclusion clause dal contratto; "
+     "Calculation Verifier applica la formula contrattuale e quantifica la discrepanza "
+     "rispetto al valore notificato",
+     "Calculation Verifier Agent + Knowledge Agent",
+     "Periodo di riferimento + tipologia penale + ID contratto",
+     "Ricalcolo penale O&M con delta vs. notifica e breakdown esclusioni applicate",
+     "[INFO: SCADA/PI Web API], Knowledge Base (RAG) contratti",
+     "API SCADA automatica; RAG su clausole; LLM per applicazione exclusion clause"),
     ("A3",
-     "Calculation Verifier Agent estrae automaticamente i dati di produzione "
-     "e disponibilita' per il periodo di riferimento dal SCADA/PI",
-     "Calculation Verifier Agent",
-     "Periodo di riferimento, ID impianto, tipologia penale",
-     "Dataset produzione/disponibilita' per il periodo",
-     "[INFO: SCADA / PI Web API]",
-     "API automatica verso SCADA/PI; validazione qualita' dati estratti"),
-    ("A4",
-     "Knowledge Agent recupera dal contratto le clausole penali applicabili, "
-     "la formula di calcolo e le exclusion clause pertinenti (meteo, curtailment TSO)",
-     "Knowledge Agent",
-     "Tipologia penale, committente, ID contratto",
-     "Clausole contrattuali, formula calcolo, exclusion clause",
-     "Knowledge Base (RAG) contratti",
-     "RAG su clausole contrattuali; cross-check con storico penali analoghe"),
-    ("A5",
-     "Calculation Verifier Agent applica la formula contrattuale ai dati "
-     "SCADA estratti, calcola il valore corretto e quantifica la discrepanza "
-     "rispetto al valore notificato; applica automaticamente le exclusion clause",
-     "Calculation Verifier Agent",
-     "Dati SCADA + clausole contrattuali + exclusion clause",
-     "Ricalcolo penale O&M, delta vs. notifica, breakdown esclusioni applicate",
-     "Calculation Engine + LLM reasoning",
-     "LLM per applicazione exclusion clause; calcolo deterministico per importo penale"),
-    ("A6",
-     "Orchestrator Agent consolida l'analisi (classificazione + ricalcolo + esclusioni) "
-     "e genera il report strutturato per il referente O&M con raccomandazione "
-     "(contestare totalmente / parzialmente / accettare) e motivazione",
-     "Orchestrator Agent",
+     "Orchestrator Agent consolida classificazione + ricalcolo + esclusioni, genera report "
+     "con raccomandazione motivata (contestare totalmente/parzialmente/accettare); "
+     "HITL – Referente O&M revisiona e valida, aggiunge contesto operativo non rilevabile "
+     "automaticamente, approva la decisione finale",
+     "Orchestrator Agent + Referente O&M (HITL)",
      "Output Calculation Verifier + Knowledge Agent",
-     "Report analitico con raccomandazione motivata",
-     "Dashboard HITL, Teams Bot",
-     "LLM synthesis con spiegazione della raccomandazione"),
-    ("A7",
-     "HITL – Referente O&M revisiona il report AI, valida il ricalcolo, "
-     "puo' aggiungere contesto operativo non rilevabile automaticamente "
-     "(es. accordi verbali con committente, situazioni straordinarie impianto)",
-     "Referente O&M",
-     "Report analitico AI con raccomandazione",
      "Decisione validata: contestare (totalmente/parzialmente) o accettare",
-     "Dashboard HITL",
-     "Assist – Human decides e approva; audit log obbligatorio"),
+     "Dashboard HITL, Teams Bot",
+     "LLM synthesis + spiegazione; Assist – Human decides e approva; audit log obbligatorio"),
 ]
 for i, row_data in enumerate(rows_tobe_a):
-    if i + 1 < len(t6.rows):
-        fill_row(t6, i + 1, list(row_data))
+    if i + 1 < len(t7.rows):
+        fill_row(t7, i + 1, list(row_data))
 
 
-# ── TABLE 7 – TO-BE Sotto-processo B ──────────────────────────────────────────
-t7 = doc.tables[7]
+# ── TABLE 8 – TO-BE Sotto-processo B ──────────────────────────────────────────
+# Cols: Step|Attività|Attore|Input|Output|Sistemi|AI  (3 data rows)
+t8 = doc.tables[8]
 rows_tobe_b = [
     ("B1",
-     "Dispute Generator Agent riceve la decisione di contestazione validata "
-     "e avvia la generazione automatica della lettera di contestazione",
-     "Dispute Generator Agent",
+     "Dispute Generator Agent riceve la decisione HITL di contestare; Knowledge Agent "
+     "recupera il template di contestazione appropriato per tipologia e committente, "
+     "lo storico contestazioni analoghe e i precedenti vinti/persi per orientare la "
+     "strategia argomentativa",
+     "Dispute Generator Agent + Knowledge Agent",
      "Decisione HITL: contestare (totale/parziale) + motivazioni",
-     "Generazione lettera contestazione avviata",
-     "Dispute Generator Agent",
-     "Trigger automatico post-approvazione HITL"),
-    ("B2",
-     "Knowledge Agent recupera dalla KB il template di contestazione appropriato "
-     "per tipologia di penale e committente, lo storico contestazioni analoghe "
-     "e i precedenti vinti/persi per orientare il tono e la strategia",
-     "Knowledge Agent",
-     "Tipologia penale, committente, storico contestazioni",
      "Template contestazione + best practice da casi analoghi",
      "Knowledge Base (RAG)",
-     "RAG su storico contestazioni e best practice"),
-    ("B3",
-     "Dispute Generator Agent genera la bozza di lettera di contestazione "
-     "compilando: dati tecnici, ricalcolo documentato, exclusion clause applicate, "
-     "riferimenti normativi/contrattuali, richiesta di storno importo",
+     "Trigger automatico post-approvazione HITL; RAG su storico contestazioni"),
+    ("B2",
+     "Dispute Generator Agent genera la bozza di lettera di contestazione compilando: "
+     "dati tecnici, ricalcolo documentato, exclusion clause applicate, riferimenti "
+     "normativi/contrattuali, richiesta di storno importo",
      "Dispute Generator Agent",
      "Template + dati tecnici + ricalcolo + exclusion clause",
      "Bozza lettera contestazione completa con allegati tecnici",
      "LLM text generation + document assembly",
      "LLM generation con template strutturato; allegati tecnici auto-generati"),
-    ("B4",
-     "Orchestrator Agent presenta la bozza contestazione al referente O&M "
-     "su Dashboard HITL per revisione, modifica e approvazione finale "
-     "prima di qualsiasi invio al committente",
-     "Orchestrator Agent",
-     "Bozza contestazione completa",
-     "Bozza presentata su Dashboard per revisione HITL",
-     "Dashboard HITL",
-     "HITL obbligatorio – nessun invio automatico al committente"),
-    ("B5",
-     "HITL – Referente O&M revisiona la bozza, apporta eventuali modifiche "
-     "(tono, dati tecnici, strategia argomentativa) e approva la versione finale",
-     "Referente O&M",
-     "Bozza contestazione AI",
-     "Contestazione approvata (o modificata e approvata)",
-     "Dashboard HITL",
-     "Human revises and approves; modifica manuale supportata da UI"),
-    ("B6",
-     "[INFO RICHIESTA: specificare se e' richiesto un secondo livello di approvazione "
-     "(es. legale, management) per contestazioni oltre una soglia di importo; "
-     "definire il workflow di approvazione multilivello se applicabile]",
-     "[INFO: attore secondo livello]",
-     "Contestazione approvata da referente O&M",
-     "[INFO: contestazione approvata anche dal secondo livello]",
-     "[INFO: sistema di workflow approvazione]",
-     "[INFO: specificare soglie importo e livelli di approvazione]"),
-    ("B7",
-     "Sistema invia la contestazione approvata al committente via email "
-     "o portale dedicato, registra l'invio con timestamp e allerta il referente "
-     "sulla scadenza per la risposta",
-     "Orchestrator Agent",
-     "Contestazione approvata",
-     "Contestazione inviata; reminder scadenza risposta impostato",
-     "Email gateway / [INFO: portale committente]",
-     "Invio automatico solo post-approvazione HITL; audit log completo"),
+    ("B3",
+     "Orchestrator Agent presenta la bozza al referente O&M su Dashboard HITL; "
+     "HITL – Referente O&M revisiona, apporta eventuali modifiche e approva la versione "
+     "finale; sistema invia la contestazione approvata al committente via email/portale "
+     "con timestamp e imposta reminder scadenza risposta",
+     "Orchestrator Agent + Referente O&M (HITL)",
+     "Bozza contestazione AI completa",
+     "Contestazione approvata inviata; reminder scadenza risposta impostato",
+     "Dashboard HITL, Email gateway / [INFO: portale committente]",
+     "HITL obbligatorio – nessun invio automatico; audit log completo"),
 ]
 for i, row_data in enumerate(rows_tobe_b):
-    if i + 1 < len(t7.rows):
-        fill_row(t7, i + 1, list(row_data))
-
-
-# ── TABLE 8 – TO-BE Sotto-processo C ──────────────────────────────────────────
-t8 = doc.tables[8]
-rows_tobe_c = [
-    ("C1",
-     "Sistema monitora automaticamente i termini di risposta del committente "
-     "e notifica il referente O&M con escalation automatica in caso di scadenza imminente",
-     "Orchestrator Agent",
-     "Contestazione inviata, scadenza risposta",
-     "Alert proattivo a referente O&M; escalation automatica",
-     "Dashboard HITL, Teams Bot",
-     "Reminder automatici 7/3/1 giorni prima della scadenza"),
-    ("C2",
-     "Penalty Classifier Agent acquisisce la risposta del committente "
-     "(accettazione storno / rifiuto / proposta parziale) e aggiorna lo stato "
-     "del contenzioso nel registro centralizzato",
-     "Penalty Classifier Agent",
-     "Risposta committente (email / portale)",
-     "Stato contenzioso aggiornato; notifica al referente O&M",
-     "Registro centralizzato, Dashboard HITL",
-     "NLP classification risposta committente; update automatico stato"),
-    ("C3",
-     "HITL – Referente O&M gestisce l'esito del contenzioso: accettazione dello storno, "
-     "gestione del rifiuto (valutazione escalation legale), approvazione accordo parziale",
-     "Referente O&M",
-     "Risposta committente classificata",
-     "Decisione finale su chiusura/proseguimento contenzioso",
-     "Dashboard HITL",
-     "Human decides – AI supporta con analisi precedenti analoghi"),
-    ("C4",
-     "Orchestrator Agent aggiorna SAP/ERP (storno penale o registrazione pagamento) "
-     "sulla base della decisione HITL validata dal referente O&M",
-     "Orchestrator Agent",
-     "Decisione HITL validata",
-     "SAP/ERP aggiornato; penale chiusa nel sistema",
-     "SAP / ERP",
-     "Integrazione automatica SAP solo post-approvazione HITL"),
-    ("C5",
-     "Knowledge Agent acquisisce l'esito del contenzioso (vinto/perso/parziale) "
-     "e aggiorna la Knowledge Base con il case documentato per apprendimento futuro",
-     "Knowledge Agent",
-     "Esito contenzioso + documentazione tecnica",
-     "KB aggiornata con nuovo case penale risolto",
-     "Knowledge Base (RAG)",
-     "Document ingestion + embedding update per continual learning"),
-    ("C6",
-     "Penalty Monitor Agent monitora continuamente i KPI contrattuali "
-     "di tutti gli impianti in scope e genera alert predittivi quando "
-     "un impianto si avvicina alla soglia di penale nel mese/trimestre corrente",
-     "Penalty Monitor Agent",
-     "KPI operativi real-time (SCADA/PI)",
-     "Alert predittivo per impianti a rischio penale",
-     "SCADA/PI, Dashboard HITL, Teams Bot",
-     "ML trend forecasting + regole contrattuali; alert proattivi"),
-    ("C7",
-     "Orchestrator Agent genera report periodici aggregati "
-     "(mensile/trimestrale) per management: valore penali ricevute/contestate/vinte, "
-     "performance portfolio, impianti critici, savings da contestazioni",
-     "Orchestrator Agent",
-     "Dati aggregati registro penali + KPI portfolio",
-     "Report management con insights e trend; dashboard executive",
-     "Dashboard HITL, Power BI",
-     "LLM-generated insights da dati aggregati"),
-]
-for i, row_data in enumerate(rows_tobe_c):
     if i + 1 < len(t8.rows):
         fill_row(t8, i + 1, list(row_data))
+
+
+# ── TABLE 9 – TO-BE Sotto-processo C ──────────────────────────────────────────
+# Cols: Step|Attività|Attore|Input|Output|Sistemi|AI  (2 data rows)
+t9 = doc.tables[9]
+rows_tobe_c = [
+    ("C1",
+     "Sistema monitora automaticamente i termini di risposta del committente e notifica "
+     "il referente O&M con escalation proattiva; Penalty Classifier Agent acquisisce la "
+     "risposta del committente, aggiorna lo stato del contenzioso; HITL – Referente O&M "
+     "gestisce l'esito (storno / rifiuto / accordo parziale); Orchestrator Agent aggiorna "
+     "SAP/ERP solo post-approvazione HITL",
+     "Orchestrator Agent + Penalty Classifier Agent + Referente O&M (HITL)",
+     "Contestazione inviata + risposta committente",
+     "Stato contenzioso aggiornato; SAP/ERP aggiornato post-HITL; penale chiusa nel sistema",
+     "Dashboard HITL, Teams Bot, SAP/ERP",
+     "Reminder automatici 7/3/1 gg prima scadenza; NLP classification risposta committente; "
+     "integrazione SAP automatica solo post-approvazione HITL"),
+    ("C2",
+     "Knowledge Agent acquisisce l'esito del contenzioso e aggiorna la KB per "
+     "apprendimento futuro; Penalty Monitor Agent monitora continuamente i KPI "
+     "contrattuali di tutti gli impianti in scope e genera alert predittivi preventivi; "
+     "Orchestrator Agent genera report periodici aggregati per management",
+     "Knowledge Agent + Penalty Monitor Agent + Orchestrator Agent",
+     "Esito contenzioso + KPI operativi real-time (SCADA/PI)",
+     "KB aggiornata; alert preventivi per impianti a rischio penale; report management",
+     "Knowledge Base (RAG), SCADA/PI, Dashboard HITL, Power BI",
+     "Document ingestion + embedding update; ML trend forecasting; LLM-generated insights"),
+]
+for i, row_data in enumerate(rows_tobe_c):
+    if i + 1 < len(t9.rows):
+        fill_row(t9, i + 1, list(row_data))
 
 
 # ── PROCESS CARDS TO-BE ───────────────────────────────────────────────────────
@@ -1107,8 +1003,9 @@ if p:
     ])
 
 
-# ── TABLE 9 – ROADMAP ─────────────────────────────────────────────────────────
-t9 = doc.tables[9]
+# ── TABLE 10 – ROADMAP ─────────────────────────────────────────────────────────
+# Cols: Fase | Obiettivo | Output | Durata Stimata  (6 data rows)
+t10 = doc.tables[10]
 roadmap = [
     ("Fase 1 – Raccolta Requisiti e Accessi\n(M1-M2)",
      "Allineamento con BSN e team EGP TGX per definire perimetro definitivo; "
@@ -1160,12 +1057,13 @@ roadmap = [
      "3 mesi — [INFO RICHIESTA AL PM: confermare]"),
 ]
 for i, row_data in enumerate(roadmap):
-    if i + 1 < len(t9.rows):
-        fill_row(t9, i + 1, list(row_data))
+    if i + 1 < len(t10.rows):
+        fill_row(t10, i + 1, list(row_data))
 
 
-# ── TABLE 10 – KPI QUANTITATIVI ───────────────────────────────────────────────
-t10 = doc.tables[10]
+# ── TABLE 11 – KPI QUANTITATIVI ───────────────────────────────────────────────
+# Cols: KPI | AS-IS | Target TO-BE | Metodo Misurazione  (4 data rows)
+t11 = doc.tables[11]
 kpi_quant = [
     ("Valore penali contestate e vinte / annuo (€)",
      "[INFO RICHIESTA AL BSN: richiedere il valore attuale AS-IS di penali contestate "
@@ -1178,87 +1076,54 @@ kpi_quant = [
      "dalla ricezione della notifica all'invio della contestazione]",
      "< 3 giorni lavorativi (AI + HITL) [INFO: confermare target con Business Owner]",
      "Timestamp ricezione notifica -> data invio contestazione nel sistema"),
-    ("Tasso di errori di calcolo rilevati nelle penali ricevute (%)",
-     "[INFO RICHIESTA AL BSN: richiedere una stima della percentuale attuale di penali "
-     "con errori di calcolo (rilevati manualmente) e del tasso di contestazione attuale]",
-     "> 95% accuracy identificazione errori calcolo da parte del Calculation Verifier Agent",
-     "Confronto ricalcolo AI vs. esito accettazione committente su campione storico"),
     ("Tempo medio per la verifica e ricalcolo di una penale (ore/penale)",
      "[INFO RICHIESTA AL BSN: richiedere il tempo medio AS-IS per la verifica manuale "
      "di una penale (estrazione SCADA + ricalcolo + redazione contestazione, ore)]",
      "< 30 minuti (AI-assisted + HITL) [INFO: confermare target]",
      "Timestamp avvio verifica -> approvazione HITL contestazione su Dashboard"),
-    ("Numero di penali gestite per FTE per mese",
-     "[INFO RICHIESTA: richiedere la capacita' AS-IS (penali/mese/FTE) per il team penali]",
-     "[INFO: definire target TO-BE – tipicamente 3-5x rispetto AS-IS con AI]",
-     "Penali processate nel mese / FTE assegnati al processo penali"),
-    ("Copertura monitoraggio preventivo KPI (% impianti monitorati con alert proattivi)",
-     "0% (monitoraggio preventivo assente o manuale sporadico)",
-     "100% impianti in scope con alert preventivi attivi",
-     "Rapporto impianti con Penalty Monitor Agent attivo / totale impianti in scope"),
     ("Tasso di rispetto scadenze contrattuali contestazione (%)",
      "[INFO RICHIESTA: richiedere la percentuale AS-IS di contestazioni inviate entro i "
      "termini contrattuali; indicare se si sono verificati casi di decadenza]",
      "100% contestazioni inviate entro i termini contrattuali",
      "Contestazioni inviate entro scadenza / totale contestazioni avviate"),
-    ("Copertura Knowledge Base contratti (% clausole penali indicizzate)",
-     "0% (clausole penali non strutturate e non indicizzate)",
-     "> 95% clausole penali di contratti in scope indicizzate in KB",
-     "Ratio clausole penali indicizzate / totale clausole penali nei contratti in scope"),
 ]
 for i, row_data in enumerate(kpi_quant):
-    if i + 1 < len(t10.rows):
-        fill_row(t10, i + 1, list(row_data))
+    if i + 1 < len(t11.rows):
+        fill_row(t11, i + 1, list(row_data))
 
 
-# ── TABLE 11 – KPI QUALITATIVI ────────────────────────────────────────────────
-t11 = doc.tables[11]
+# ── TABLE 12 – KPI QUALITATIVI ────────────────────────────────────────────────
+# Cols: KPI | Target TO-BE | Metodo Misurazione  (4 data rows)
+t12 = doc.tables[12]
 kpi_qual = [
     ("Soddisfazione referenti O&M (self-reported)",
      "Riduzione del carico di lavoro manuale per verifica e contestazione penali; "
      "target: maggioranza referenti lo valuta ridotto (scala Likert, survey semestrale) "
      "[INFO: definire target score con Business Owner]",
      "Survey semestrale ai referenti O&M del team penali EGP TGX"),
-    ("Adozione sistema AI da parte dei referenti O&M",
-     "Target: > 90% referenti utilizza regolarmente la Dashboard HITL "
-     "entro 6 mesi dal go-live [INFO: confermare target con EGP TGX]",
-     "Log di accesso e utilizzo Dashboard HITL (sessioni/settimana per utente)"),
-    ("Qualita' contestazioni generate dall'AI (% accettate senza modifiche sostanziali)",
-     "Target: > 70% delle bozze di contestazione generate dall'AI accettate dal "
+    ("Qualita' contestazioni generate dall'AI (% bozze approvate senza modifiche sostanziali)",
+     "Target: > 70% delle bozze di contestazione generate dall'AI approvate dal "
      "referente senza modifiche sostanziali entro 12 mesi dal go-live "
      "[INFO: confermare target con i referenti pilota]",
      "Tracking HITL: bozze approvate as-is / totale bozze generate"),
-    ("Completezza e accuratezza della Knowledge Base contrattuale",
-     "Target: referenti O&M valutano il Knowledge Agent utile e accurato per "
-     "il recupero di clausole e best practice contestazione "
-     "(scala Likert > 4/5) [INFO: calibrare target]",
-     "Survey trimestrale ai referenti O&M + tasso query KB risolte senza escalation"),
     ("Tracciabilita' e auditabilita' del processo penali",
      "Target: 100% delle decisioni di accettare/contestare una penale documentate "
      "con motivazione nel sistema (obbligatorio per audit e controllo interno)",
      "Audit log Dashboard HITL: % decisioni con motivazione registrata"),
-    ("Efficacia monitoraggio preventivo KPI",
-     "Target: > 80% degli impianti che hanno superato la soglia di penale "
-     "nel trimestre precedente hanno ricevuto un alert predittivo in anticipo "
-     "[INFO: calibrare dopo deployment Penalty Monitor Agent]",
-     "Confronto: impianti con alert preventivo emesso / impianti che hanno generato "
-     "penale nel periodo di riferimento"),
-    ("Soddisfazione management su reporting portfolio penali",
-     "Target: management valuta il report AI-generated accurato e utile per "
-     "le decisioni di portfolio (scala Likert > 4/5) "
-     "[INFO: definire target con il management EGP TGX]",
-     "Survey trimestrale al management O&M EGP TGX"),
     ("[INFO RICHIESTA AL BSN: specificare ulteriori KPI qualitativi rilevanti "
      "per la Gestione Penali O&M EGP TGX emersi dai documenti sorgente]",
      "[INFO: definire target]",
      "[INFO: definire metodo di misurazione]"),
 ]
 for i, row_data in enumerate(kpi_qual):
-    if i + 1 < len(t11.rows):
-        fill_row(t11, i + 1, list(row_data))
+    if i + 1 < len(t12.rows):
+        fill_row(t12, i + 1, list(row_data))
 
 
 # ── SAVE ──────────────────────────────────────────────────────────────────────
+output_dir = os.path.dirname(OUTPUT)
+if output_dir:
+    os.makedirs(output_dir, exist_ok=True)
 doc.save(OUTPUT)
 print(f"\n Blueprint IT O&M Gestione Penali salvato in: {OUTPUT}")
 print("\nSezioni completate con dati contestuali EGP TGX - Gestione Penali.")
@@ -1291,37 +1156,37 @@ open_questions = [
         "suggestion": "Confermare con BSN: il processo include solo le penali ricevute da committenti/TSO, o anche le penali emesse verso i fornitori di manutenzione?"
     },
     {
-        "section": "Tabla 0 (Sistemi) — SAP modulo, SCADA/PI, sistema documentale",
+        "section": "Tabla 1 (Sistemi AS-IS) — SAP modulo, SCADA/PI, sistema documentale",
         "reason": "Dettaglio dei sistemi IT specifici (modulo SAP, nome piattaforma SCADA/PI, sistema documentale contratti) non disponibile senza i documenti sorgente",
         "suggestion": "Richiedere all'IT Owner: descrizione completa dell'architettura IT AS-IS (sistema SAP, SCADA/PI, documentale, ticketing)"
     },
     {
-        "section": "Tabla 1 (AS-IS Sotto-processo A) — Registro e sistema di tracking",
+        "section": "Tabla 2 (AS-IS Sotto-processo A) — Registro e sistema di tracking",
         "reason": "Non noto se esiste un registro centralizzato delle penali (Excel, SAP, ticketing) o se la gestione e' distribuita via email per singolo referente",
         "suggestion": "Analizzare il materiale sorgente nella cartella SharePoint per identificare il tool di registrazione attuale (es. Excel allegato, screenshot sistema)"
     },
     {
-        "section": "Tabla 2 (AS-IS Sotto-processo B) — Metodo di ricalcolo",
+        "section": "Tabla 3 (AS-IS Sotto-processo B) — Metodo di ricalcolo",
         "reason": "Non nota la metodologia di ricalcolo manuale delle penali (foglio Excel standard vs. ad hoc per tipologia) senza i documenti sorgente",
         "suggestion": "Recuperare il/i file Excel di calcolo penali dalla cartella SharePoint e analizzare le formule applicate per ciascuna tipologia"
     },
     {
-        "section": "Tabla 4 (Data Mapping) — Formato notifiche committente",
+        "section": "Tabla 5 (Data Mapping) — Formato notifiche committente",
         "reason": "Formato delle notifiche di penale (PDF libero, strutturato, API portale committente) sconosciuto senza analisi dei documenti sorgente",
         "suggestion": "Analizzare esempi di notifiche penale nella cartella SharePoint per definire la strategia di parsing (strutturato vs. OCR/LLM extraction)"
     },
     {
-        "section": "Tabla 9 (Roadmap) — Numero contratti e impianti in scope",
+        "section": "Tabla 10 (Roadmap) — Numero contratti e impianti in scope",
         "reason": "Numero di contratti, committenti e impianti da includere nel pilota e nello scale-up non definiti",
         "suggestion": "Richiedere al BSN e al PM: n. contratti attivi, n. committenti/TSO, n. impianti in scope; proposta impianti/committenti per il pilota (Fase 5)"
     },
     {
-        "section": "Tabla 10 (KPI Quantitativi) — Tutti i valori baseline AS-IS",
+        "section": "Tabla 11 (KPI Quantitativi) — Tutti i valori baseline AS-IS",
         "reason": "Nessun dato quantitativo baseline disponibile (valore penali/anno, tempo medio verifica, tasso contestazioni vinte) senza il materiale sorgente",
         "suggestion": "Richiedere al BSN una scheda KPI AS-IS con: valore penali ricevute/anno (€), valore penali stornate/anno (€), tempo medio verifica (ore/penale), n. FTE dedicati"
     },
     {
-        "section": "Tabla 10 (KPI Quantitativi) — Ruoli stakeholder (Business Owner, Data Owner, IT Owner, Product Owner)",
+        "section": "Tabla 0 (Stakeholder) — Ruoli specifici del progetto (Business Owner, Data Owner, IT Owner, Product Owner)",
         "reason": "Nomi e unita' organizzative dei ruoli chiave del progetto non specificati",
         "suggestion": "Richiedere al BSN: nome e unita' organizzativa per Business Owner, Data Owner (responsabile dati SCADA/contratti), IT Owner (GICT/IT EGP), Product Owner (AISA Factory)"
     },
