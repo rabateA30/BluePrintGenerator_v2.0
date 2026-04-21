@@ -87,11 +87,7 @@ Sezioni testuali: Stakeholder & Partecipanti · Contesto e Finalità · Processo
 ```json
 {
   "open_questions": [
-    {
-      "section": "Tabla 11 - KPI Quantitativi",
-      "reason": "Nessun dato baseline trovato nei materiali sorgente",
-      "suggestion": "Richiedere al Business Owner i valori AS-IS per almeno 4 KPI"
-    }
+    "Tabla 11 - KPI Quantitativi"
   ]
 }
 ```
