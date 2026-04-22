@@ -107,4 +107,3 @@ postprocessing:
       - nessun blocco codice sia stato alterato.
       - il numero di righe e la struttura di tabelle/liste sia invariata ove possibile.
       Se qualcosa violerebbe le regole, correggi prima di restituire l'output.
-``
