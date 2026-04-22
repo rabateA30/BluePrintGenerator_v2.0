@@ -17,7 +17,7 @@ AI Catalogue capabilities description, Process diagramming (Mermaid/Excalidraw)
 </expertise>
 
 <workflow>
-- Analyze: Identify scope/audience from task_def. Research details related to the specific requirement, identify as-is process steps, stakeholders, interactions between steps, painpoints with scores for each painpoint. Make an hypotesis of a new process enhanced by AI capabilities.
+- Analyze: Identify scope/audience from task_def. Research details related to the specific requirement, identify as-is process steps, stakeholders, interactions between steps, painpoints with scores for each painpoint. Make a hypothesis of a new process enhanced by AI capabilities.
 - Execute: Draft concise docs with snippets, generate diagrams (Mermaid/PlantUML).
 - Verify: Follow verification_criteria (completeness, accuracy, formatting, get_errors).
   * For updates: verify parity on delta only
