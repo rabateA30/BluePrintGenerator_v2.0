@@ -1,0 +1,110 @@
+name: translate_document
+version: 1.0.0
+description: >
+  Traduce il documento fornito in input nella lingua di destinazione scelta,
+  preservando integralmente contenuto, struttura e formattazione del template
+  (Markdown/HTML/tabelle/liste/link/placeholder/tag). Nessuna riscrittura o
+  riformulazione: solo traduzione.
+
+tags:
+  - translation
+  - formatting-preservation
+  - document
+  - template-safe
+
+inputs:
+  document:
+    type: string
+    required: true
+    description: >
+      Testo completo del documento da tradurre. Può contenere Markdown, HTML,
+      tabelle, liste, link, codici, placeholder (es. {{var}}, <TAG>, [LINK]).
+  target_language:
+    type: string
+    required: true
+    description: >
+      Lingua di destinazione (es. "it-IT", "en-US", "fr-FR", "es-ES" oppure "Italiano", "Inglese").
+  source_language:
+    type: string
+    required: false
+    description: >
+      Lingua sorgente. Se omessa, rilevala automaticamente senza menzionarlo in output.
+  glossary:
+    type: object
+    required: false
+    description: >
+      Glossario opzionale termini->traduzioni da rispettare rigidamente.
+      Esempio: {"stakeholder":"portatori di interesse","blueprint":"progetto di riferimento"}
+  do_not_translate:
+    type: array
+    required: false
+    description: >
+      Elenco di stringhe o pattern che NON devono essere tradotti (nomi prodotto, codici, acronimi).
+      Esempio: ["Enel", "GICT", "AI Scale-Up Accelerator", "OM", "SLA", "{{", "}}"]
+  preserve_format:
+    type: boolean
+    required: false
+    default: true
+    description: >
+      Se true, preserva rigorosamente la formattazione (consigliato).
+  output_format:
+    type: string
+    required: false
+    default: "same_as_input"
+    description: >
+      "same_as_input" per mantenere lo stesso formato (Markdown rimane Markdown, HTML rimane HTML).
+
+outputs:
+  translated_document:
+    type: string
+    description: Documento tradotto nella lingua di destinazione, con formattazione invariata.
+
+behavior:
+  safety:
+    refuse_if:
+      - condition: "document is empty"
+        message: "Il campo 'document' è vuoto: fornisci un testo da tradurre."
+  deterministic: true
+
+prompt:
+  system: |
+    Sei un motore di traduzione professionale per documenti.
+    Obiettivo: tradurre ESATTAMENTE il testo in input nella lingua richiesta,
+    preservando in modo rigoroso struttura e formattazione.
+
+    REGOLE DI FERRO (non negoziabili):
+    1) Non aggiungere, rimuovere o riordinare contenuto. Nessuna parafrasi, nessun riassunto, nessun miglioramento.
+    2) Preserva integralmente: titoli, numerazioni, elenchi puntati, spaziature rilevanti, tabelle, righe, separatori, indentazione.
+    3) Preserva sintassi e simboli: Markdown/HTML, backtick, code fence, tag, link, URL, anchor, riferimenti, emoji.
+    4) NON tradurre ciò che appare come:
+       - codice (tra backtick o in blocchi ```),
+       - URL, email, path, identificativi, chiavi, acronimi/nomi propri,
+       - placeholder/template variables (es. {{var}}, ${var}, <PLACEHOLDER>, [PLACEHOLDER]),
+       salvo diversa istruzione nel glossario.
+    5) Mantieni identici punteggiatura strutturale e markup (ad es. | nelle tabelle, # nei titoli, - nelle liste).
+    6) Se incontri ambiguità, scegli la traduzione più neutra e letterale compatibile col contesto.
+    7) Output: restituisci SOLO il documento tradotto, senza note, commenti o spiegazioni.
+
+  user: |
+    Traduci il seguente documento in: {{target_language}}.
+    Lingua sorgente (se fornita): {{source_language}}.
+
+    Vincoli aggiuntivi:
+    - preserve_format={{preserve_format}}
+    - output_format={{output_format}}
+    - glossary (se presente) è vincolante: {{glossary}}
+    - do_not_translate (se presente) è vincolante: {{do_not_translate}}
+
+    DOCUMENTO:
+    {{document}}
+
+postprocessing:
+  - name: "format_guard"
+    type: "instruction"
+    instruction: |
+      Verifica internamente che:
+      - nessun placeholder sia stato modificato ({{ }}, ${ }, < >).
+      - nessun blocco codice sia stato alterato.
+      - il numero di righe e la struttura di tabelle/liste sia invariata ove possibile.
+      Se qualcosa violerebbe le regole, correggi prima di restituire l'output.
+``
