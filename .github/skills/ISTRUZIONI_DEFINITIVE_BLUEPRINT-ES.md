@@ -21,7 +21,24 @@ python -c "import docx; import fitz; import pptx; print('All OK')"
 ```python  
 def find_para(doc, text_fragment, style=None, start=0):
     """OBBLIGATORIO - usare sempre invece di indici fissi"""
-    
+    if start < 0:
+        raise ValueError("start must be >= 0")
+
+    paragraphs = doc.paragraphs
+    for para in paragraphs[start:]:
+        if text_fragment not in para.text:
+            continue
+
+        if style is not None:
+            para_style = getattr(getattr(para, "style", None), "name", None)
+            if para_style != style:
+                continue
+
+        return para
+
+    raise ValueError(
+        f"Paragraph not found for fragment={text_fragment!r}, style={style!r}, start={start}"
+    )
 def set_para_text(para, new_text):
     """FORMATO CORRETTO - preserva formatting"""
     try:
