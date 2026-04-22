@@ -108,15 +108,12 @@ paragrafo e con le colonne della tabella nel template.
 
 ## 5. Open Questions
 
-Quando una sezione non può essere compilata per mancanza di dati:
+Quando una sezione non può essere compilata per mancanza di dati, restituisci `open_questions`
+come array di stringhe contenente solo i nomi delle sezioni mancanti:
 
 ```json
 {
   "open_questions": [
-    {
-      "section": "KPI Quantitativi",
-      "reason": "Nessun dato baseline nei materiali sorgente",
-      "suggestion": "Richiedere al Business Owner i valori AS-IS per almeno 4 KPI"
-    }
+    "KPI Quantitativi"
   ]
 }
