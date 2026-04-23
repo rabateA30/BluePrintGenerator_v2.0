@@ -102,7 +102,7 @@ Sezione testuale introduttiva a livello documento:
 
 ### Per ogni Proceso (ripetibile)
 
-#### 1. Contexto e Finalidad
+#### 1. Contexto y Finalidad
 
 | Sezione | Contenuto |
 |---|---|
