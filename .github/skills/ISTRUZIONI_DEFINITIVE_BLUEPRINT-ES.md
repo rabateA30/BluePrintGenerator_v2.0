@@ -416,7 +416,7 @@ def generate_spanish_blueprint_1_5():
 ```
 □ Template Blueprint_Template_1.5_vacio-ES.docx utilizzato
 □ Resumen Ejecutivo compilato
-□ Secciones 1.1–1.4 complete (Alcance/Finalidad/Perimetro/Restricciones)
+□ Secciones 1.1–1.4 complete (Alcance/Finalidad/Perímetro/Restricciones)
 □ Tabla 0 — Roles (min 4 righe)
 □ Tabla 1 — Herramientas AS-IS (min 3 righe)
 □ Tablas 2/3/4 — AS-IS Secuencias (tutte le celle compilate)
