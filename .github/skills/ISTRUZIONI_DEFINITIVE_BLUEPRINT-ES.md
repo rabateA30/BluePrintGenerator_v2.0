@@ -117,7 +117,7 @@ Sezione testuale introduttiva a livello documento:
 
 **Tabla 0** (10x3) — Roles:
 
-| Rolo | Nombre / Unità Org. | Responsabilidad |
+| Rol | Nombre / Unidad Org. | Responsabilidad |
 |---|---|---|
 | … | … | … |
 
