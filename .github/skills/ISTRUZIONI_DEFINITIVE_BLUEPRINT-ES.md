@@ -76,7 +76,7 @@ Tutto il contenuto generato deve essere in **Español correcto** con accenti ort
 **SEMPRE utilizzare**: `Blueprint_Template_1.5_vacio-ES.docx`
 
 ```
-Template Path: BluePrintGenerator_v2.0/TEMPLATE/Blueprint_Template_1.5_vacio-ES.docx
+Template Path: TEMPLATE/Blueprint_Template_1.5_vacio-ES.docx
 ```
 
 ---
