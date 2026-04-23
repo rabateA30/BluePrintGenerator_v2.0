@@ -108,8 +108,8 @@ Sezione testuale introduttiva a livello documento:
 |---|---|
 | **1.1 Alcance** | Objetivo claro del proceso |
 | **1.2 Finalidad** | Lista objetivos específicos |
-| **1.3 Perimetro** | EN ALCANCE / FUERA DE ALCANCE |
-| **1.4 Restricciones Clave** | Normativos / Tecnicos / Organizativos |
+| **1.3 Perímetro** | EN ALCANCE / FUERA DE ALCANCE |
+| **1.4 Restricciones Clave** | Normativos / Técnicos / Organizativos |
 
 ---
 
