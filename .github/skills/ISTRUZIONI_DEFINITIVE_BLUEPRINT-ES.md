@@ -1,256 +1,436 @@
-# BlueprintGenerator Agent - ISTRUZIONI DEFINITIVE
+# BlueprintGenerator Agent — ISTRUZIONI DEFINITIVE (Español)
 
-## Template Standard Obbligatorio  
-**SEMPRE utilizzare**: `Blueprint_1.4_vuoto.docx`
+> **Attivazione**: queste istruzioni si applicano **ogni volta che l'utente richiede un Blueprint in lingua Spagnola**.
 
-### Ubicazione Template
+---
+
+## Regola Lingua — DOPPIO CHECK OBBLIGATORIO
+
+Tutto il contenuto generato deve essere in **Español correcto** con accenti ortografici precisi.
+
+### Accenti obbligatori — parole frequenti nel dominio Blueprint
+
+| Errato | Corretto |
+|---|---|
+| proceso | proceso ✓ |
+| analisis | análisis ✓ |
+| informacion | información ✓ |
+| gestion | gestión ✓ |
+| solucion | solución ✓ |
+| comunicacion | comunicación ✓ |
+| validacion | validación ✓ |
+| automatizacion | automatización ✓ |
+| optimizacion | optimización ✓ |
+| configuracion | configuración ✓ |
+| integracion | integración ✓ |
+| clasificacion | clasificación ✓ |
+| implementacion | implementación ✓ |
+| generacion | generación ✓ |
+| documentacion | documentación ✓ |
+| evaluacion | evaluación ✓ |
+| operacion | operación ✓ |
+| visualizacion | visualización ✓ |
+| prediccion | predicción ✓ |
+| actualizacion | actualización ✓ |
+| notificacion | notificación ✓ |
+| planificacion | planificación ✓ |
+| verificacion | verificación ✓ |
+| extracion | extracción ✓ |
+| revision | revisión ✓ |
+| tecnico | técnico ✓ |
+| metodo | método ✓ |
+| calidad | calidad ✓ |
+| estandar | estándar ✓ |
+| numero | número ✓ |
+| area | área ✓ |
+| critico | crítico ✓ |
+| especifico | específico ✓ |
+| diagnostico | diagnóstico ✓ |
+| automatico | automático ✓ |
+| periodico | periódico ✓ |
+| historico | histórico ✓ |
+
+### Regole tilde obbligatorie
+
+- **Parole acute** (acento en la última sílaba): terminano in vocale, -n, -s → acento: `también`, `según`, `después`
+- **Parole piane** (acento en la penúltima): terminano in consonante diversa da -n, -s → acento: `fácil`, `útil`
+- **Parole interrogative/esclamative**: sempre accentate → `¿qué?`, `¿cómo?`, `¿cuándo?`, `¿dónde?`, `¿por qué?`
+- **Distinzioni semantiche**: `sí` (sì) vs `si` (se) · `él` (lui) vs `el` (il) · `más` (più) vs `mas` (ma) · `sólo/solo` (verificare contesto)
+
+### Checklist Lingua prima del salvataggio
+
 ```
-Template Path: <PERCORSO_TEMPLATE>\Blueprint_1.4_vuoto.docx
+□ Nessuna parola con accento mancante
+□ Tutti i titoli di sezione con accenti corretti
+□ Intestazioni tabelle in español corretto
+□ Testo delle Fichas de Proceso con accenti
+□ Puntos Críticos, KPI e Roadmap con accenti
+□ Nessun termine italiano o inglese mescolato al testo spagnolo
+□ Punteggiatura interrogativa/esclamativa con apertura: ¿ / ¡
 ```
 
-## WORKFLOW COMPLETO OBBLIGATORIO
+---
 
-### Phase 1 — Environment Setup  
+## Template Standard Obbligatorio
+
+**SEMPRE utilizzare**: `Blueprint_Template_1.5_vacio-ES.docx`
+
+```
+Template Path: TEMPLATE/Blueprint_Template_1.5_vacio-ES.docx
+```
+
+---
+
+## Struttura Documento — Template 1.5 ES
+
+### Titolo principale
+```
+Blueprint – [NOMBRE PROYECTO]
+```
+
+---
+
+### 1. Resumen Ejecutivo
+Sezione testuale introduttiva a livello documento:
+
+| Campo | Contenuto |
+|---|---|
+| Procesos Identificados | Elenco processi coperti |
+| Contexto General | Contesto aziendale/operativo |
+
+---
+
+### Per ogni Proceso (ripetibile)
+
+#### 1. Contexto y Finalidad
+
+| Sezione | Contenuto |
+|---|---|
+| **1.1 Alcance** | Objetivo claro del proceso |
+| **1.2 Finalidad** | Lista objetivos específicos |
+| **1.3 Perímetro** | EN ALCANCE / FUERA DE ALCANCE |
+| **1.4 Restricciones Clave** | Normativos / Técnicos / Organizativos |
+
+---
+
+#### Stakeholders y Participantes
+
+**Tabla 0** (10x3) — Roles:
+
+| Rol | Nombre / Unidad Org. | Responsabilidad |
+|---|---|---|
+| … | … | … |
+
+*(9 righe dati — includere Business Owner, Data Owner, IT Owner, Product Owner + specifici progetto)*
+
+---
+
+#### 2. Proceso AS-IS — Descripción Estructurada
+
+##### 2.1 Sistemas Involucrados (AS-IS)
+
+**Tabla 1** (8x3):
+
+| Herramienta AS-IS | Descripción / Rol | Tipología |
+|---|---|---|
+| … | … | … |
+
+*(7 righe dati)*
+
+---
+
+##### 2.2 AS-IS — Secuencia Operativa
+
+**Tabla 2** (6x6) — AS-IS Secuencia A *(prefilled Paso A1–A5)*:
+
+| Paso | Actividad | Actor | Entrada | Salida | Sistemas |
+|---|---|---|---|---|---|
+| A1 | … | … | … | … | … |
+
+**Tabla 3** (5x6) — AS-IS Secuencia B:
+
+| Paso | Actividad | Actor | Entrada | Salida | Sistemas |
+|---|---|---|---|---|---|
+| … | … | … | … | … | … |
+
+**Tabla 4** (5x6) — AS-IS Secuencia C:
+
+| Paso | Actividad | Actor | Entrada | Salida | Sistemas |
+|---|---|---|---|---|---|
+| … | … | … | … | … | … |
+
+---
+
+##### 2.3 Fichas de Proceso AS-IS (sezione testuale — OBBLIGATORIA)
+
+Compilare **almeno 3 Fichas**. Formato per ciascuna:
+
+```
+Ficha N: [NOMBRE SUBPROCESO]
+Entrada: [elementos input específicos]
+Actividades:
+  1. [actividad específica]
+  2. ...
+Salida: [deliverables]
+Punto Crítico: [limitación específica del proceso actual]
+```
+
+---
+
+##### 2.4 Puntos Críticos Principales (AS-IS)
+
+```
+Puntos Críticos Generales:
+• [punto crítico específico 1]
+• [punto crítico específico 2]
+• [punto crítico específico N]
+```
+
+---
+
+#### 3. Proceso TO-BE
+
+##### 3.1 Arquitectura Funcional IA
+
+**Tabla 5** (7x5):
+
+| Componente | Función | Tecnología/Método | Agente Común | Note |
+|---|---|---|---|---|
+| … | … | … | … | … |
+
+*(6 righe dati — min 5 componenti compilati)*
+
+---
+
+##### 3.2 Mapeo de Datos-Sistemas TO-BE (AI-ENABLED)
+
+**Tabla 6** (3x5):
+
+| Dato | Sistema Origen | Sistema Destino | Formato | Nota |
+|---|---|---|---|---|
+| … | … | … | … | … |
+
+*(2 righe dati — specificare flussi dati chiave abilitati dall'AI)*
+
+---
+
+##### 3.2b Secuencia Operativa Detallada (TO-BE)
+
+**Tabla 7** (7x7) — TO-BE Subproceso A — **colonna IA+HITL OBBLIGATORIA**:
+
+| Paso | Actividad | Actor | Entrada | Salida | Sistemas | IA + Intervención Humana |
+|---|---|---|---|---|---|---|
+| … | … | … | … | … | … | … |
+
+**Tabla 8** (4x7) — TO-BE Subproceso B:
+
+| Paso | Actividad | Actor | Entrada | Salida | Sistemas | IA + Intervención Humana |
+|---|---|---|---|---|---|---|
+| … | … | … | … | … | … | … |
+
+**Tabla 9** (4x7) — TO-BE Subproceso C:
+
+| Paso | Actividad | Actor | Entrada | Salida | Sistemas | IA + Intervención Humana |
+|---|---|---|---|---|---|---|
+| … | … | … | … | … | … | … |
+
+---
+
+##### 3.3 Fichas de Proceso TO-BE (sezione testuale — OBBLIGATORIA)
+
+Compilare **almeno 3 Fichas**. Formato per ciascuna:
+
+```
+Ficha N: [NOMBRE SUBPROCESO CON IA]
+Entrada:
+  • [input específico]
+Actividades:
+  1. [actividad optimizada con IA]
+  2. ...
+Salida:
+  • [deliverable mejorado]
+```
+
+---
+
+##### 3.4 Que NO hace la IA (OBBLIGATORIA)
+
+```
+• [limitación IA 1 — decisiones que requieren criterio humano]
+• [limitación IA 2]
+• [limitación IA N]
+```
+
+---
+
+#### 4. Delta AS-IS vs TO-BE
+
+##### 4.1 Impactos Operativos
+
+```
+• [impacto operativo específico 1]
+• [impacto operativo específico 2]
+• [impacto operativo específico N]
+```
+
+##### 4.2 Invariantes (No Cambia)
+
+```
+• [elemento invariante 1]
+• [elemento invariante 2]
+• [elemento invariante N]
+```
+
+---
+
+#### 5. Hoja de Ruta (Draft)
+
+**Duración Total Estimada**: [XXX semanas/meses]
+
+**Tabla 10** (3x4):
+
+| Fase | Objetivo | Entregable | Duración Estimada |
+|---|---|---|---|
+| … | … | … | … |
+
+*(2 righe dati — espandere se necessario)*
+
+---
+
+#### 6. KPI
+
+**KPI Cuantitativos**
+
+**Tabla 11** (7x4):
+
+| KPI | AS-IS (Situación Actual) | Objetivo TO-BE | Método de Medición |
+|---|---|---|---|
+| … | … | … | … |
+
+*(6 righe dati — inserire valori numerici baseline + target)*
+
+**KPI Cualitativos**
+
+**Tabla 12** (5x3):
+
+| KPI | Objetivo TO-BE | Método de Medición |
+|---|---|---|
+| … | … | … |
+
+*(4 righe dati)*
+
+---
+
+## Riepilogo Tabelle — Template 1.5 ES (13 tabelle totali)
+
+| # | Nome | Dim. | Colonne |
+|---|---|---|---|
+| Tabla 0 | Roles | 10x3 | Rolo \| Nombre/Unità Org. \| Responsabilidad |
+| Tabla 1 | Sistemas AS-IS | 8x3 | Herramienta AS-IS \| Descripción/Rol \| Tipología |
+| Tabla 2 | AS-IS Secuencia A | 6x6 | Paso \| Actividad \| Actor \| Entrada \| Salida \| Sistemas |
+| Tabla 3 | AS-IS Secuencia B | 5x6 | Paso \| Actividad \| Actor \| Entrada \| Salida \| Sistemas |
+| Tabla 4 | AS-IS Secuencia C | 5x6 | Paso \| Actividad \| Actor \| Entrada \| Salida \| Sistemas |
+| Tabla 5 | Arquitectura Funcional IA | 7x5 | Componente \| Función \| Tecnología/Método \| Agente Común \| Note |
+| Tabla 6 | Mapeo Datos TO-BE | 3x5 | Dato \| Sistema Origen \| Sistema Destino \| Formato \| Nota |
+| Tabla 7 | TO-BE Secuencia A | 7x7 | Paso \| Actividad \| Actor \| Entrada \| Salida \| Sistemas \| IA+HITL |
+| Tabla 8 | TO-BE Secuencia B | 4x7 | idem |
+| Tabla 9 | TO-BE Secuencia C | 4x7 | idem |
+| Tabla 10 | Hoja de Ruta | 3x4 | Fase \| Objetivo \| Entregable \| Duración Estimada |
+| Tabla 11 | KPI Cuantitativos | 7x4 | KPI \| AS-IS \| Objetivo TO-BE \| Método de Medición |
+| Tabla 12 | KPI Cualitativos | 5x3 | KPI \| Objetivo TO-BE \| Método de Medición |
+
+---
+
+## Helper Functions Python — OBBLIGATORIE
+
 ```python
-# Verificare sempre Python e librerie
-python --version  # Python 3.14+
-python -c "import docx; import fitz; import pptx; print('All OK')"
-```
-
-### Phase 2 — Template Analysis
-```python  
 def find_para(doc, text_fragment, style=None, start=0):
-    """OBBLIGATORIO - usare sempre invece di indici fissi"""
+    """Usare sempre invece di indici fissi."""
     if start < 0:
         raise ValueError("start must be >= 0")
-
-    paragraphs = doc.paragraphs
-    for para in paragraphs[start:]:
+    for para in doc.paragraphs[start:]:
         if text_fragment not in para.text:
             continue
-
         if style is not None:
             para_style = getattr(getattr(para, "style", None), "name", None)
             if para_style != style:
                 continue
-
         return para
-
     raise ValueError(
-        f"Paragraph not found for fragment={text_fragment!r}, style={style!r}, start={start}"
+        f"Paragraph not found: fragment={text_fragment!r}, style={style!r}, start={start}"
     )
+
 def set_para_text(para, new_text):
-    """FORMATO CORRETTO - preserva formatting"""
+    """Sostituisce testo preservando il formatting."""
     try:
         if para.runs:
             first_run = para.runs[0]
-            font_name = first_run.font.name
-            font_size = first_run.font.size
-            font_bold = first_run.font.bold
+            font_name  = first_run.font.name
+            font_size  = first_run.font.size
+            font_bold  = first_run.font.bold
             font_italic = first_run.font.italic
-            
             para.clear()
             new_run = para.add_run(new_text)
-            
-            if font_name: new_run.font.name = font_name
-            if font_size: new_run.font.size = font_size  
-            if font_bold: new_run.font.bold = font_bold
+            if font_name:   new_run.font.name   = font_name
+            if font_size:   new_run.font.size   = font_size
+            if font_bold:   new_run.font.bold   = font_bold
             if font_italic: new_run.font.italic = font_italic
         else:
             para.text = new_text
-    except:
+    except Exception:
         para.text = new_text
 ```
 
-### Phase 3 — Content Extraction & Synthesis
-- **Extractar TUTTO il contenuto** dalle fonti disponibili
-- **Sintetizzare per ogni sezione** specifica del template
-- **Non lasciare mai tabelle vuote** o sezioni incomplete
+---
 
-### Phase 4 — Document Generation COMPLETO
-
-#### SEZIONI OBBLIGATORIE
-
-**Lingua dell'output**: utilizzare integralmente la lingua richiesta dalla specifica/configurazione del documento tra **Italiano**, **English** o **Español**. Le intestazioni e i testi di esempio sotto riportati devono essere adattati coerentemente alla lingua selezionata.
-
-**1. Título Principal / Titolo Principale / Main Title**: 
-
-#### TABLAS OBLIGATORIAS (13 totales) - TUTTE DA RIEMPIRE:
-
-**Tabla 0 - Roles**: Business Owner, Data Owner, IT Owner, Product Owner + specifici progetto
-
-**Tabla 1 - Sistemas**: Core Platform, Integration Layer, External Systems
-
-**Tabla 2 - AS-IS Process Cards**: 4 Macroactividades con Input/Actividades/Salida/Punto Crítico/Intervención Humana
-
-**Tablas 3,4 - AS-IS Sequences**: Subprocesos detallados paso-paso  
-
-**Tabla 5 - Data Mapping**: ≥6 flussi dati con Sistema Origen → Sistema Destino
-
-**Tabla 6 - Arquitectura Funcional**: ≥7 componenti técnicos con Función + Tecnología  
-
-**Tablas 7,8,9 - TO-BE Sequences**: Con columna **"IA+Intervención Humana"** OBLIGATORIA
-
-**Tabla 10 - Roadmap**: 6 fases M1-M12+ con Objetivos + Entregables + Duración
-
-**Tabla 11 - KPIs Cuantitativos**: 4 KPIs con AS-IS + Target TO-BE + % Mejora
-
-**Tabla 12 - KPIs Cualitativos**: 4 KPIs con Target + Método Medición
-
-#### PROCESS CARDS DETALLADAS - OBLIGATORIAS:
-
-```
-3.1 PROCESO ACTUAL (AS-IS) - [NOMBRE]
-
-MACROACTIVIDAD A: [NOMBRE]
-Entrada: • [elementos input específicos]
-Actividades AS-IS: [lista numerada 1-N]  
-Salida: • [deliverables específicos]
-Punto Crítico: [limitación específica proceso actual]
-Intervención Humana / Nota: N/A — proceso manual AS-IS
-
-[Repetir per 3-4 Macroactividades]
-
-4.1 PROCESO FUTURO (TO-BE) - [NOMBRE CON IA]
-
-MACROACTIVIDAD A: [NOMBRE MEJORADO]  
-Entrada: • [input, algunos unchanged]
-Actividades TO-BE: [actividades optimizadas con IA]
-Salida: • [deliverables mejorados] 
-Sistemas: [plataformas involucradas]
-Intervención Humana: [donde require expertise humana]
-
-[Repetir per 3-4 Macroactividades]
-```
-
-#### SECCIÓN DELTA OBLIGATORIA:
-
-```
-5. COMPARATIVA AS-IS vs TO-BE
-
-SITUACIÓN ACTUAL (AS-IS) - LIMITACIONES:  
-• [5-6 limitaciones específicas con métricas]
-
-5.1 IMPACTOS OPERATIVOS TO-BE:
-• [5-6 mejoras operativas específicas]
-
-5.2 INVARIANTES (NO CAMBIA):  
-• [4-5 elementos que se mantienen]
-
-5.3 NUEVOS REQUISITOS HABILITANTES:
-• [4-5 requirements nuevos para TO-BE]
-
-SITUACIÓN OBJETIVO (TO-BE) - BENEFICIOS:
-• [5-6 beneficios específicos con impacto]
-```
-
-### TRADUCCIÓN COMPLETA AL ESPAÑOL - OBLIGATORIA
-
-**Dictionary Traducciones**:
-```python
-translations = {
-    # Títulos principales
-    "Sommario Esecutivo": "Resumen Ejecutivo",
-    "Contesto e finalità": "Contexto y Finalidad",
-    "Scopo": "Alcance", 
-    "Finalità": "Finalidad",
-    "Perimetro": "Perímetro",
-    "Vincoli chiave": "Restricciones Clave",
-    
-    # Headers tablas  
-    "Ruolo": "Rol",
-    "Nome / Unità Org.": "Nombre / Unidad Organizativa",
-    "Responsabilità": "Responsabilidades",
-    "Sistema": "Sistema",
-    "Tipologia": "Tipología", 
-    "Data Mapping": "Mapeo de Datos",
-    "Dato": "Dato",
-    "Sistema Sorgente": "Sistema Origen",
-    "Sistema Destinazione": "Sistema Destino",
-    "Architettura Funzionale": "Arquitectura Funcional",
-    "Componente": "Componente",
-    "Funzione": "Función",  
-    "Tecnologia/Metodo": "Tecnología/Método",
-    "Roadmap": "Hoja de Ruta",
-    "Fase": "Fase",
-    "Obiettivo": "Objetivo",
-    "Output": "Entregable", 
-    "Durata": "Duración",
-    "AS-IS": "Situación Actual",
-    "Target TO-BE": "Objetivo Futuro",
-    "Miglioramento": "Mejora",
-    
-    # Proceso
-    "Step": "Paso",
-    "Attività": "Actividad",
-    "Attore": "Actor", 
-    "Input": "Entrada",
-    "Sistemi": "Sistemas",
-    "AI+HITL": "IA+Intervención Humana"
-}
-```
-
-## EXECUTION COMMAND  
-
-**Per OGNI generazione Blueprint**:
+## Sequenza di Generazione — OBBLIGATORIA
 
 ```python
-def generate_complete_spanish_blueprint():
-    # 1. Load Template 1.4 OBBLIGATORIO
-    template_path = r"...\Blueprint_1.4_vuoto.docx"
-    
-    # 2. Fill ALL sections ESPAÑOL  
-    # - Título principal
-    # - Resumen Ejecutivo (4 paragrafi)
-    # - Contexto y Finalidad (1.1-1.4)
-    
-    # 3. Fill ALL 13 tables COMPLETAMENTE
-    # - NO lasciare tabelle vuote
-    # - Específico per domain del progetto
-    
-    # 4. Add Process Cards DETALLADAS
-    # - AS-IS: ≥3 Macroactividades  
-    # - TO-BE: ≥3 Macroactividades
-    # - Con Input/Actividades/Salida/Sistemas/HITL
-    
-    # 5. Add Delta Section ESTRUTURADA  
-    # - AS-IS limitations
-    # - TO-BE impacts + Invariantes + Requirements
-    # - TO-BE benefits
-    
-    # 6. Translate ALL títulos español
-    
-    # 7. Save as Blueprint_[ProjectName]_ES_FINAL.docx
+def generate_spanish_blueprint_1_5():
+    # 1. Caricare template 1.5 ES
+    template_path = r"...\Blueprint_Template_1.5_vacio-ES.docx"
+
+    # 2. Compilare Resumen Ejecutivo
+    # 3. Compilare Contexto y Finalidad (1.1–1.4)
+    # 4. Compilar Tabla 0 (Roles) — min 4 righe
+    # 5. Compilar Tabla 1 (Sistemas AS-IS) — min 3 righe
+    # 6. Compilar Tablas 2, 3, 4 (AS-IS Secuencias) — nessuna cella vuota
+    # 7. Compilar Fichas AS-IS (2.3) — min 3 Fichas testuali
+    # 8. Compilar Puntos Críticos (2.4)
+    # 9. Compilar Tabla 5 (Arquitectura Funcional IA) — min 5 componenti
+    # 10. Compilar Tabla 6 (Mapeo Datos TO-BE)
+    # 11. Compilar Tablas 7, 8, 9 (TO-BE Secuencias) — colonna IA+HITL sempre compilata
+    # 12. Compilar Fichas TO-BE (3.3) — min 3 Fichas testuali
+    # 13. Compilar sección 3.4 "Que NO hace la IA"
+    # 14. Compilar Delta 4.1 Impactos + 4.2 Invariantes
+    # 15. Compilar Tabla 10 (Hoja de Ruta)
+    # 16. Compilar Tabla 11 (KPI Cuantitativos) — valori numerici precisi
+    # 17. Compilar Tabla 12 (KPI Cualitativos)
+    # 18. Salvare come Blueprint_[NombreProyecto]_ES_FINAL.docx
 ```
 
-## VALIDATION CHECKLIST OBBLIGATORIA
+---
 
-Before saving, VERIFICARE:
-- [ ] Template 1.4 utilizzato
-- [ ] Título principal in español  
-- [ ] Resumen Ejecutivo 4 paragraphs específicos
-- [ ] Secciones 1.1-1.4 complete in español
-- [ ] 13/13 tablas filled >90%  
-- [ ] Process Cards AS-IS + TO-BE detalladas
-- [ ] Sección Delta estruturada 5.1/5.2/5.3  
-- [ ] ALL títulos translated español
-- [ ] Content específico per domain progetto
-- [ ] KPIs con métricas quantitative precisas
-- [ ] Columna "IA+Intervención Humana" in TO-BE tables
+## Validation Checklist
 
-## RISULTATO FINALE
-
-**Output File**: `Blueprint_[ProjectName]_ES_FINAL.docx`
-
-**Contenuto**:  
-✅ 100% ESPAÑOL (títulos + contenuto)  
-✅ Template 1.4 con ALL secciones filled
-✅ Process Cards detallate con macroactividades  
-✅ 13 tabelle completamente filled 
-✅ Delta AS-IS vs TO-BE ben strutturato
-✅ Domain-specific content estratto da fonti
-✅ KPIs quantitativi + qualitativi realistici
-
-**Quality Standard**: ≥95% completeness + 100% español + domain accuracy
-
-Esta metodología è DEFINITIVA per ALL future Blueprint generations.
+```
+□ Template Blueprint_Template_1.5_vacio-ES.docx utilizzato
+□ Resumen Ejecutivo compilato
+□ Secciones 1.1–1.4 complete (Alcance/Finalidad/Perímetro/Restricciones)
+□ Tabla 0 — Roles (min 4 righe)
+□ Tabla 1 — Herramientas AS-IS (min 3 righe)
+□ Tablas 2/3/4 — AS-IS Secuencias (tutte le celle compilate)
+□ Fichas AS-IS 2.3 — min 3 Fichas con Entrada/Actividades/Salida/Punto Crítico
+□ Puntos Críticos 2.4 — specifici del dominio
+□ Tabla 5 — Arquitectura Funcional IA con colonna "Agente Común"
+□ Tabla 6 — Mapeo Datos TO-BE compilata
+□ Tablas 7/8/9 — TO-BE Secuencias con colonna "IA + Intervención Humana" compilata
+□ Fichas TO-BE 3.3 — min 3 Fichas
+□ Sección 3.4 "Que NO hace la IA" presente
+□ Delta 4.1 Impactos Operativos
+□ Delta 4.2 Invariantes (No Cambia)
+□ Tabla 10 — Hoja de Ruta con Entregables
+□ Tabla 11 — KPI Cuantitativos con baseline + objetivo TO-BE numerici
+□ Tabla 12 — KPI Cualitativos con método de medición
+□ Output: Blueprint_[NombreProyecto]_ES_FINAL.docx
+```
