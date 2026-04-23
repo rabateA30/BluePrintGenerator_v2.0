@@ -1,178 +1,309 @@
-# Blueprint Generator Agent - Template 1.4 METODOLOGÍA COMPLETA
+# Blueprint Generator Agent - Template 1.5 METODOLOGIA COMPLETA
 
-## Nuevo Template Estándar
-**IMPORTANTE**: A partir de ahora, usar siempre `Blueprint_1.4_vuoto.docx` como template base para todas las generaciones futuras.
+> **Nota di versione**: questo file mantiene il nome storico `TEMPLATE_1.4_UPDATE.md`, ma il suo contenuto sostituisce le precedenti istruzioni 1.4 e definisce il template standard **1.5** da usare come riferimento.
 
-### Ubicación Template
+## Nuovo Template Standard
+**IMPORTANTE**: Usare sempre `Blueprint_Template_1.5_vuoto.docx` come template base per tutte le generazioni future. Questo documento sostituisce le indicazioni precedenti relative al template 1.4.
+
+### Posizione Template
 ```
-Template Path: C:\path\to\template\Blueprint_1.4_vuoto.docx
-```
-
-### Estructura Template 1.4 - COMPLETA
-
-El template 1.4 incluye las siguientes secciones mejoradas vs versiones anteriores:
-
-#### 1. Sección Contextual Mejorada
-- **1.1 Scopo**: Definición clara del objetivo del proceso
-- **1.2 Finalità**: Lista de objetivos específicos (4-5 bullets)  
-- **1.3 Perimetro**: IN SCOPE / OUT OF SCOPE claramente separados
-- **1.4 Vincoli Chiave**: Categorías NORMATIVI / TECNICI / ORGANIZZATIVI
-
-#### 2. Process Cards DETALLADAS - OBLIGATORIAS
-**SIEMPRE incluir estas secciones después de las tablas:**
-
-```
-3.1 PROCESO ACTUAL (AS-IS) - [NOMBRE PROCESO]
-
-MACROATTIVITÀ A: [NOMBRE MACRO-ACTIVIDAD]
-Input: • [elementos input específicos]
-Attività AS-IS: [lista numerada 1-N actividades]
-Output: • [deliverables específicos]
-Pain Point: [limitaciones proceso actual]
-HITL / Note: N/A — proceso manual AS-IS
-
-MACROATTIVITÀ B: [SEGUNDA MACRO-ACTIVIDAD]
-[mismo formato]
-
-4.1 PROCESO FUTURO (TO-BE) - [NOMBRE PROCESO CON IA]
-
-MACROATTIVITÀ A: [NOMBRE MEJORADO]
-Input: • [elementos input, alcuni unchanged]
-Attività TO-BE: [actividades optimizadas con IA]
-Output: • [deliverables mejorados]
-Sistemi: [sistemas involucrados]
-HITL: [intervención humana requerida]
+Template Path: TEMPLATE/Blueprint_Template_1.5_vuoto.docx
 ```
 
-#### 3. Tablas Estandarizadas (13 tablas totales) - TODAS OBLIGATORIAS
-1. **Table 0**: Ruoli (8x3) - Ruolo | Nome/Unità Org. | Responsabilità
-2. **Table 1**: Sistemi Coinvolti (7x3) - Sistema | Ruolo | Tipologia
-3. **Table 2**: AS-IS Process Cards (5x6) - **OBLIGATORIO LLENAR COMPLETAMENTE**
-4. **Table 3**: AS-IS Operational Sequence A (5x6) - **OBLIGATORIO**  
-5. **Table 4**: AS-IS Operational Sequence B (3x6) - **OBLIGATORIO**
-6. **Table 5**: Data Mapping (7x5) - Dato | Sistema Sorgente | Sistema Destinazione | Formato | Note
-7. **Table 6**: Architettura Funzionale (8x4) - Componente | Funzione | Tecnologia/Metodo | Note
-8. **Table 7**: TO-BE Operational Sequence A (4x7) - **INCLUIR COLUMNA AI+HITL**
-9. **Table 8**: TO-BE Operational Sequence B (4x7) - **INCLUIR COLUMNA AI+HITL**
-10. **Table 9**: TO-BE Operational Sequence C (3x7) - **INCLUIR COLUMNA AI+HITL**
-11. **Table 10**: Roadmap (7x4) - Fase | Obiettivo | Output | Durata
-12. **Table 11**: KPI Quantitativi (5x4) - KPI | AS-IS | Target TO-BE | Miglioramento
-13. **Table 12**: KPI Qualitativi (5x3) - KPI | Target TO-BE | Metodo Misurazione
+---
 
-#### 4. Sección Delta AS-IS vs TO-BE - OBLIGATORIA
+## Struttura Documento Template 1.5 — COMPLETA
+
+### Livello Documento
+
 ```
-5. DELTA AS-IS vs TO-BE
-
-AS-IS (Situación Actual):
-• [problemas específicos actuales]
-
-5.1 Impactos Operativos TO-BE:
-• [mejoras operativas específicas]
-
-5.2 Invariantes (No Cambia):
-• [elementos que permanecen iguales]
-
-5.3 Nuevos Requisitos Habilitantes:
-• [requirements nuevos para implementar TO-BE]
-
-TO-BE (Situación Objetivo):
-• [beneficios específicos objetivo]
+Blueprint – [NOME PROGETTO]
 ```
 
-### Helper Functions Actualizadas - MANDATORY USE
+---
 
-Usar sempre estas funciones actualizadas:
+### 1. Sommario Esecutivo
+Sezione introduttiva a livello documento (prima di qualsiasi processo):
 
-```python
-def set_para_text(para, new_text):
-    """Reemplaza texto preservando formato - VERSION CORREGIDA."""
-    try:
-        if para.runs:
-            first_run = para.runs[0]
-            font_name = first_run.font.name
-            font_size = first_run.font.size
-            font_bold = first_run.font.bold
-            font_italic = first_run.font.italic
-            
-            para.clear()
-            new_run = para.add_run(new_text)
-            
-            if font_name: new_run.font.name = font_name
-            if font_size: new_run.font.size = font_size  
-            if font_bold: new_run.font.bold = font_bold
-            if font_italic: new_run.font.italic = font_italic
-        else:
-            para.text = new_text
-    except:
-        para.text = new_text
+| Campo | Contenuto |
+|---|---|
+| Processi Identificati | Elenco dei processi coperti dal Blueprint |
+| Contesto Generale | Descrizione del contesto aziendale/operativo |
+| Obiettivo della Soluzione | Obiettivo complessivo della soluzione AI |
+| Impatto Atteso | Benefici attesi ad alto livello |
 
-def add_process_cards_content(doc):
-    """OBLIGATORIO: Añade Process Cards detalladas."""
-    # [implementación completa como en complete_blueprint_plataforma_diagnostico.py]
+---
 
-def translate_headings_to_spanish(doc):
-    """OBLIGATORIO: Traduce títulos al español."""
-    # [implementación con diccionario completo traducciones]
+### Processo N: [NOME PROCESSO]
+Ogni processo segue la struttura seguente (ripetibile per più processi).
+
+---
+
+#### Contesto e Finalità
+
+| Campo | Contenuto |
+|---|---|
+| **Scopo** | Definizione chiara dell'obiettivo del processo |
+| **Vincoli chiave** | Vincoli normativi, tecnici, organizzativi |
+| **Perimetro IN SCOPE** | Attività/sistemi inclusi |
+| **Perimetro OUT OF SCOPE** | Attività/sistemi esclusi |
+
+---
+
+#### Stakeholder & Partecipanti
+
+**Table 0** — Ruoli (12x3):
+
+| Ruolo | Nome / Unità Org. | Responsabilità |
+|---|---|---|
+| … | … | … |
+
+*(12 righe dati disponibili)*
+
+---
+
+#### Processo AS-IS – Descrizione Strutturata
+
+##### Sistemi Coinvolti (AS-IS)
+
+**Table 1** — Sistemi (10x3):
+
+| Sistema | Ruolo | Tipologia |
+|---|---|---|
+| … | … | … |
+
+*(10 righe dati disponibili)*
+
+---
+
+##### AS-IS Process Cards
+
+**Table 2** — AS-IS Process Cards (5x6):
+
+| Macroattività | Input | Attività | Output | Punto Critico | Intervento Umano |
+|---|---|---|---|---|---|
+| … | … | … | … | … | … |
+
+*(4 righe dati disponibili — OBBLIGATORIO compilare completamente)*
+
+---
+
+##### AS-IS Sequenze Operative
+
+**AS-IS Sequence (parte 1) — [NOME SEQUENZA]**
+
+**Table 3** — AS-IS Sequenza A (9x4):
+
+| Step | Attore | Attività | Sistemi |
+|---|---|---|---|
+| … | … | … | … |
+
+*(8 righe dati disponibili)*
+
+**AS-IS Sequence (parte 2) — [NOME SEQUENZA]**
+
+**Table 4** — AS-IS Sequenza B (10x4):
+
+| Step | Attore | Attività | Sistemi |
+|---|---|---|---|
+| … | … | … | … |
+
+*(9 righe dati disponibili)*
+
+---
+
+##### 2.4 Pain Point Principali (AS-IS)
+
+```
+Pain Point Generali:
+• [pain point specifico 1]
+• [pain point specifico 2]
+• [pain point specifico N]
 ```
 
-### Content Mapping Strategy - METODOLOGÍA COMPLETA
+---
 
-#### PASO 1: Análisis Fuentes
-- Extraer información AS-IS de documentos técnicos
-- Identificar pain points y limitaciones actuales  
-- Mapear beneficios TO-BE con IA/automatización
+#### Processo TO-BE
 
-#### PASO 2: Llenar Todas las Tablas
-- **Tablas 2,3,4**: Procesos AS-IS con detalle operativo
-- **Tablas 7,8,9**: Procesos TO-BE con columna AI+HITL
-- **Tabla 5**: Data mapping con flows específicos
-- **Tabla 6**: Arquitectura con componentes AI
+##### 3.1 Architettura Funzionale AI
 
-#### PASO 3: Process Cards Detalladas
-- **AS-IS**: Mínimo 3 Macroattività con Input/Attività/Output/Pain Points
-- **TO-BE**: Mínimo 3 Macroattività con Input/Attività/Output/Sistemi/HITL
-- **Pain Points**: Específicos del dominio, no genéricos
-- **HITL**: Definir claramente donde interviene humano
+**Table 5** — Architettura Funzionale AI (8x3):
 
-#### PASO 4: Traducciones y Delta
-- **Títulos**: TODOS al español usando diccionario completo
-- **Delta**: Sección estructurada AS-IS → 5.1/5.2/5.3 → TO-BE
-- **KPIs**: Quantitativos con números específicos, Qualitativos con métodos medición
+| Componente | Funzione | Tecnologia/Metodo |
+|---|---|---|
+| … | … | … |
 
-### Domain-Specific Best Practices - EXTENDED
+*(7 righe dati disponibili)*
 
-#### Para Proyectos AI/ML:
-- **Training Dataset**: Especificar volumen, calidad, período histórico
-- **AI Performance**: Precisión %, recall %, tiempos procesamiento
-- **HITL Points**: Validación experta, edge cases, decisiones complejas
-- **Roadmap**: Requirements→Data Prep→Training→Validation→Deployment→Optimization
+---
 
-#### Para Proyectos Operacionales:
-- **AS-IS Pain Points**: Tiempo, coste, calidad, escalabilidad, riesgos
-- **TO-BE Benefits**: Cuantificar mejoras con KPIs específicos
-- **Change Management**: Formación, adopción, período transición
-- **Process Cards**: Nivel detalle suficiente para implementación
+##### 3.2 Sequenza Operativa di Dettaglio
 
-### COMANDO ACTUALIZADO para BlueprintGenerator
+**TO-BE Sequence (parte 1) — [NOME SEQUENZA]**
 
-**SIEMPRE ejecutar esta secuencia**:
+**Table 6** — TO-BE Sequenza A (7x5):
 
-1. **Template**: Blueprint_1.4_vuoto.docx (MANDATORY)
-2. **Fill ALL Tables**: NO dejar tablas vacías
-3. **Add Process Cards**: Sección 3.1 AS-IS + 4.1 TO-BE 
-4. **Add Delta Section**: Sección 5 completa
-5. **Translate**: ALL títulos al español
-6. **Output**: Save as `Blueprint_{project_name}_ES_COMPLETO.docx`
+| Step | Attore | Attività | AI + Intervento Umano | Sistemi |
+|---|---|---|---|---|
+| … | … | … | … | … |
 
-**Validation Checklist**:
+*(6 righe dati disponibili — INCLUDERE colonna AI+HITL)*
+
+**TO-BE Sequence (parte 2) — [NOME SEQUENZA]**
+
+**Table 7** — TO-BE Sequenza B (6x5):
+
+| Step | Attore | Attività | AI + Intervento Umano | Sistemi |
+|---|---|---|---|---|
+| … | … | … | … | … |
+
+*(5 righe dati disponibili — INCLUDERE colonna AI+HITL)*
+
+**TO-BE Sequence (parte 3) — [NOME SEQUENZA]**
+
+**Table 8** — TO-BE Sequenza C (10x5):
+
+| Step | Attore | Attività | AI + Intervento Umano | Sistemi |
+|---|---|---|---|---|
+| … | … | … | … | … |
+
+*(9 righe dati disponibili — INCLUDERE colonna AI+HITL)*
+
+---
+
+#### Delta AS-IS vs TO-BE
+
 ```
-□ 13 tablas completamente llenas
-□ Process Cards AS-IS (mínimo 3 macroattività)
-□ Process Cards TO-BE (mínimo 3 macroattività) 
-□ Sección Delta AS-IS vs TO-BE
-□ Títulos traducidos al español
-□ KPIs cuantitativos con números específicos
-□ HITL claramente definido en TO-BE
+Situazione Attuale (AS-IS) — Limitazioni:
+• [limitazione specifica 1]
+• [limitazione specifica 2]
+
+Impatti Operativi TO-BE:
+• [miglioramento operativo 1]
+• [miglioramento operativo 2]
+
+Invarianti (non cambia):
+• [elemento invariante 1]
+• [elemento invariante 2]
+
+Nuovi Requisiti Abilitanti:
+• [requisito abilitante 1]
+• [requisito abilitante 2]
+
+Situazione Obiettivo (TO-BE) — Benefici:
+• [beneficio specifico 1]
+• [beneficio specifico 2]
 ```
 
-Esta metodología es efectiva IMMEDIATELY para ALL futuras generaciones Blueprint.
+---
+
+#### 5. Roadmap Draft
+
+**Durata Totale Stimata**: [XXX settimane/mesi]
+
+**Table 9** — Roadmap (7x4):
+
+| Fase | Step | Task | Deliverable |
+|---|---|---|---|
+| … | … | … | … |
+
+*(6 righe dati disponibili)*
+
+---
+
+#### 6. KPI
+
+**KPI Quantitativi**
+
+**Table 10** — KPI Quantitativi (5x4):
+
+| KPI | Baseline AS-IS | Target TO-BE | % Miglioramento |
+|---|---|---|---|
+| … | … | … | … |
+
+*(4 righe dati disponibili — inserire valori numerici specifici)*
+
+**KPI Qualitativi**
+
+**Table 11** — KPI Qualitativi (5x3):
+
+| KPI | Target | Metodo di Misurazione |
+|---|---|---|
+| … | … | … |
+
+*(4 righe dati disponibili)*
+
+---
+
+## Riepilogo Tabelle — Template 1.5 (12 tabelle totali)
+
+| # | Nome | Dimensioni | Colonne |
+|---|---|---|---|
+| Table 0 | Ruoli | 12x3 | Ruolo \| Nome/Unità Org. \| Responsabilità |
+| Table 1 | Sistemi Coinvolti AS-IS | 10x3 | Sistema \| Ruolo \| Tipologia |
+| Table 2 | AS-IS Process Cards | 5x6 | Macroattività \| Input \| Attività \| Output \| Punto Critico \| Intervento Umano |
+| Table 3 | AS-IS Sequenza A | 9x4 | Step \| Attore \| Attività \| Sistemi |
+| Table 4 | AS-IS Sequenza B | 10x4 | Step \| Attore \| Attività \| Sistemi |
+| Table 5 | Architettura Funzionale AI | 8x3 | Componente \| Funzione \| Tecnologia/Metodo |
+| Table 6 | TO-BE Sequenza A | 7x5 | Step \| Attore \| Attività \| AI+Intervento Umano \| Sistemi |
+| Table 7 | TO-BE Sequenza B | 6x5 | Step \| Attore \| Attività \| AI+Intervento Umano \| Sistemi |
+| Table 8 | TO-BE Sequenza C | 10x5 | Step \| Attore \| Attività \| AI+Intervento Umano \| Sistemi |
+| Table 9 | Roadmap | 7x4 | Fase \| Step \| Task \| Deliverable |
+| Table 10 | KPI Quantitativi | 5x4 | KPI \| Baseline AS-IS \| Target TO-BE \| % Miglioramento |
+| Table 11 | KPI Qualitativi | 5x3 | KPI \| Target \| Metodo di Misurazione |
+
+---
+
+## Differenze rispetto al Template 1.4
+
+| Elemento | Template 1.4 | Template 1.5 |
+|---|---|---|
+| File template | `Blueprint_1.4_vuoto.docx` | `Blueprint_Template_1.5_vuoto.docx` |
+| Sommario Esecutivo | Assente | **Presente** (sezione 1) |
+| Ruoli | 8 righe | **12 righe** |
+| Sistemi coinvolti | 7 righe | **10 righe** |
+| AS-IS Process Cards | Pain Point (col 5) | **Punto Critico** + **Intervento Umano** |
+| AS-IS Sequenze | 6 colonne (con Output) | **4 colonne**: Step\|Attore\|Attività\|Sistemi |
+| Data Mapping | Tabella dedicata (7x5) | **Rimossa** |
+| Architettura Funzionale | 8x4 (con colonna Note) | **8x3** (senza Note) |
+| TO-BE Sequenze | 7 colonne | **5 colonne**: Step\|Attore\|Attività\|AI+HITL\|Sistemi |
+| Roadmap | Fase\|Obiettivo\|Output\|Durata | **Fase\|Step\|Task\|Deliverable** |
+| Totale tabelle | 13 | **12** |
+
+---
+
+## Sequenza di Generazione — OBBLIGATORIA
+
+1. **Template**: `Blueprint_Template_1.5_vuoto.docx` (MANDATORY)
+2. **Sommario Esecutivo**: Compilare i 4 campi introduttivi
+3. **Contesto e Finalità**: Scopo, Vincoli, Perimetro IN/OUT
+4. **Tabelle AS-IS** (0, 1, 2, 3, 4): Compilare completamente, nessuna cella vuota
+5. **Pain Point**: Specifici del dominio, non generici
+6. **Architettura AI** (Table 5): Componenti con tecnologie specifiche
+7. **Tabelle TO-BE** (6, 7, 8): Includere sempre colonna `AI + Intervento Umano`
+8. **Delta AS-IS vs TO-BE**: Tutte e 5 le sottosezioni
+9. **Roadmap** (Table 9): Con deliverable concreti per fase
+10. **KPI** (Table 10, 11): Quantitativi con numeri specifici, qualitativi con metodo misura
+11. **Output**: Salvare come `Blueprint_{nome_progetto}_COMPLETO.docx`
+
+---
+
+## Validation Checklist
+
+```
+□ File template 1.5 utilizzato come base
+□ Sommario Esecutivo compilato (4 campi)
+□ Contesto e Finalità: Scopo + Vincoli + Perimetro IN/OUT
+□ Table 0 — Ruoli (min. 4 righe compilate)
+□ Table 1 — Sistemi coinvolti AS-IS (min. 3 righe)
+□ Table 2 — AS-IS Process Cards completamente compilata (Punto Critico + Intervento Umano)
+□ Table 3 — AS-IS Sequenza A compilata
+□ Table 4 — AS-IS Sequenza B compilata
+□ Pain Point principali (min. 3 specifici del dominio)
+□ Table 5 — Architettura Funzionale AI (min. 3 componenti)
+□ Table 6/7/8 — TO-BE Sequenze con colonna AI+Intervento Umano
+□ Delta AS-IS vs TO-BE (tutte 5 sottosezioni)
+□ Table 9 — Roadmap con Deliverable per ogni fase
+□ Table 10 — KPI Quantitativi con valori numerici e % miglioramento
+□ Table 11 — KPI Qualitativi con metodo di misurazione
+```
