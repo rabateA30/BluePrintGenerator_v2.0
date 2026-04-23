@@ -1,7 +1,9 @@
 # Blueprint Generator Agent - Template 1.5 METODOLOGIA COMPLETA
 
+> **Nota di versione**: questo file mantiene il nome storico `TEMPLATE_1.4_UPDATE.md`, ma il suo contenuto sostituisce le precedenti istruzioni 1.4 e definisce il template standard **1.5** da usare come riferimento.
+
 ## Nuovo Template Standard
-**IMPORTANTE**: Usare sempre `Blueprint_Template_1.5_vuoto.docx` come template base per tutte le generazioni future.
+**IMPORTANTE**: Usare sempre `Blueprint_Template_1.5_vuoto.docx` come template base per tutte le generazioni future. Questo documento sostituisce le indicazioni precedenti relative al template 1.4.
 
 ### Posizione Template
 ```
