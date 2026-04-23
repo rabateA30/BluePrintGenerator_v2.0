@@ -5,7 +5,7 @@
 
 ### Posizione Template
 ```
-Template Path: BluePrintGenerator_v2.0/TEMPLATE/Blueprint_Template_1.5_vuoto.docx
+Template Path: TEMPLATE/Blueprint_Template_1.5_vuoto.docx
 ```
 
 ---
