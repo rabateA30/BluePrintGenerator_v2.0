@@ -169,7 +169,7 @@ Puntos Críticos Generales:
 | Módulo de Agrupación de Casos Masivos | Detección y agrupación de reclamaciones correspondientes a la misma incidencia de red | Clusterización geoespacial (GIS) + correlación temporal | BluePrintGenerator Agent | Reduce duplicados; genera un único expediente maestro por incidencia |
 | Gestor de Excepciones al Cierre | Identificación de casos no cerrables automáticamente y gestión de estados intermedios de suspensión | Motor de reglas de cierre · Catálogo de excepciones · Workflow de suspensión | BluePrintGenerator Agent | Implementa "Necesidades generales" — ver sección 3.5 |
 | Motor de Comunicación Diferenciada | Generación y envío de comunicaciones personalizadas por sub-tipo de reclamación | Templates LLM-augmented · Selección por sub-tipo · Multicanal (email, SMS, app, carta) | BluePrintGenerator Agent | 20 templates diferenciados — ver módulo "Cierre y Comunicación" |
-| Panel de Monitorización y Alertas | Dashboard en tiempo real de KPIs de reclamaciones, alertas de SLA en riesgo, y trazabilidad de integraciones | Power BI Embedded · Alertas Microsoft Teams | GICT Integrations | — |
+| Motor de Comunicación Diferenciada | Generación y envío de comunicaciones personalizadas por sub-tipo de reclamación | Templates LLM-augmented · Selección por sub-tipo · Multicanal (email, SMS, app, carta) | BluePrintGenerator Agent | 20 templates diferenciados — ver módulo "Cierre y Comunicación" |
 
 ---
 
