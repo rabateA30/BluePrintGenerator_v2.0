@@ -176,12 +176,13 @@ Puntos Críticos Generales:
 
 #### 3.2 Mapeo de Datos — Sistemas TO-BE (AI-ENABLED)
 
-**Tabla 6** (3×5):
+**Tabla 6** (4×5):
 
 | Dato | Sistema Origen | Sistema Destino | Formato | Nota |
 |---|---|---|---|---|
 | Expediente de reclamación enriquecido (CUPS + sub-tipo IA + contexto técnico) | SAP CRM + GIS + SCADA + WART | Motor de Routing Paramétrico | JSON estructurado | Creado en tiempo real al registrar la reclamación |
 | Estado de orden de trabajo en campo | WART | SAP CRM · Portal Cliente | Webhook REST | Actualización automática del expediente al cambiar estado en WART |
+| Datos de medición y lectura del contador | SAP IS-U · PUC | Motor de Clasificación IA · SAP CRM | JSON / RFC | Recuperado automáticamente para sub-tipos CNT-01 a CNT-04 al enriquecer el expediente |
 
 ---
 
