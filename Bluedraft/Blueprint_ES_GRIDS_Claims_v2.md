@@ -14,7 +14,7 @@
 | **Procesos Identificados** | 1. Recepción y Clasificación de Reclamaciones (multicanal) · 2. Routing y Asignación al Dominio Operativo Competente · 3. Gestión Operativa Específica por Dominio (Red / Contadores / Contratos / Interrupciones) · 4. Gestión de Excepciones y Casos Especiales · 5. Cierre y Comunicación al Cliente |
 | **Contexto General** | El área GRIDS España gestiona reclamaciones de clientes relativas al suministro eléctrico y a la red de distribución. El proceso abarca desde la recepción multicanal (IVR, portal web, app, presencial, email) hasta el cierre del expediente y la comunicación al cliente, pasando por la investigación técnica, la coordinación con equipos de campo y la gestión de casos con implicaciones regulatorias. El volumen anual supera las 120.000 reclamaciones, con una tipología heterogénea que incluye incidencias de red, disputas de facturación y medición, cambios contractuales e interrupciones programadas o imprevistas. La solución IA propuesta automatiza la clasificación, el routing y el cierre, liberando a los gestores para concentrarse en los casos de mayor complejidad y valor. |
 | **Objetivo de la Solución** | Implementar un sistema IA de clasificación y routing automático de reclamaciones que: (1) identifique de forma precisa la tipología y sub-tipo de cada reclamación al momento de su recepción; (2) enrute automáticamente el caso al equipo y sistema operativo correcto; (3) enriquezca el expediente con contexto técnico recuperado de los sistemas de red (GIS, WART, PUC, RECORE); (4) gestione el ciclo completo de cierre incluyendo excepciones, estados intermedios y comunicaciones personalizadas; (5) proporcione trazabilidad integral y métricas en tiempo real para la mejora continua del servicio. |
-| **Impacto Esperado** | Reducción del tiempo medio de resolución del 45 % (de 12,4 a < 7 días hábiles) · Aumento de la tasa de cierre automático del 28 % al 65 % · Eliminación de la consulta manual multi-sistema por el gestor (ahorro estimado de 3 h/gestor/día) · Mejora de la satisfacción del cliente (CSAT de 3,2 a ≥ 4,0 / 5) · Beneficio económico estimado: 1,8 M€/año (ver sección 4.3) |
+| **Impacto Esperado** | Reducción del tiempo medio de resolución del 45 % (de 12,4 a < 7 días hábiles) · Aumento de la tasa de cierre automático del 28 % al 65 % · Eliminación de la consulta manual multi-sistema por el gestor (ahorro estimado de 3 h/gestor/día) · Mejora de la satisfacción del cliente (CSAT de 3,2 a ≥ 4,0 / 5) · Beneficio económico neto estimado: 1,8 M€/año (ver sección 4.4) |
 
 ---
 
@@ -163,12 +163,12 @@ Puntos Críticos Generales:
 
 | Componente | Función | Tecnología / Método | Agente Común | Nota |
 |---|---|---|---|---|
-| Motor de Clasificación IA (extendido) | Clasificación multiclase de reclamaciones en tipología principal + sub-tipo específico por dominio CJ | NLP multiclase · Modelo fine-tuned sobre corpus histórico de reclamaciones GRIDS ES · Confianza por umbral | BluePrintGenerator Agent | Cubre 18 sub-tipos identificados en los CJ de Red, Contadores, Contratos e Interrupciones |
+| Motor de Clasificación IA (extendido) | Clasificación multiclase de reclamaciones en tipología principal + sub-tipo específico por dominio CJ | NLP multiclase · Modelo fine-tuned sobre corpus histórico de reclamaciones GRIDS ES · Confianza por umbral | BluePrintGenerator Agent | Cubre 20 sub-tipos identificados en los CJ de Red (incluido RED-04a/b), Contadores, Contratos e Interrupciones, más DAÑ-01 |
 | Motor de Routing Paramétrico | Enrutamiento inteligente a una de 8 rutas según sub-tipo, zona, urgencia, historial y sistemas afectados | Motor de reglas + scoring paramétrico · Tablas de routing configurables | BluePrintGenerator Agent | Sustituye las Rutas 1/2/3 estáticas; parámetros editables sin redeploy |
 | Módulo de Contexto Técnico Enriquecido | Recuperación automática de información técnica de GIS, SCADA y WART al crear el expediente | API REST · Integración en tiempo real · Cache TTL=5 min | Integraciones GICT | Elimina la consulta manual del gestor a sistemas auxiliares |
 | Módulo de Agrupación de Casos Masivos | Detección y agrupación de reclamaciones correspondientes a la misma incidencia de red | Clusterización geoespacial (GIS) + correlación temporal | BluePrintGenerator Agent | Reduce duplicados; genera un único expediente maestro por incidencia |
 | Gestor de Excepciones al Cierre | Identificación de casos no cerrables automáticamente y gestión de estados intermedios de suspensión | Motor de reglas de cierre · Catálogo de excepciones · Workflow de suspensión | BluePrintGenerator Agent | Implementa "Necesidades generales" — ver sección 3.5 |
-| Motor de Comunicación Diferenciada | Generación y envío de comunicaciones personalizadas por sub-tipo de reclamación | Templates LLM-augmented · Selección por sub-tipo · Multicanal (email, SMS, app, carta) | BluePrintGenerator Agent | 20 templates diferenciados — ver módulo "Cierre y Comunicación" |
+| Motor de Comunicación Diferenciada | Generación y envío de comunicaciones personalizadas por sub-tipo de reclamación | Templates LLM-augmented · Selección por sub-tipo · Multicanal (email, SMS, app, carta) | BluePrintGenerator Agent | 22 templates diferenciados — ver módulo "Cierre y Comunicación" |
 | Panel de Monitorización y Alertas | Dashboard en tiempo real de KPIs de reclamaciones, alertas de SLA en riesgo, y trazabilidad de integraciones | Power BI Embedded · Alertas Microsoft Teams | GICT Integrations | — |
 
 ---
@@ -193,7 +193,7 @@ Puntos Críticos Generales:
 |---|---|---|---|---|---|---|
 | A1 | Recepción omnicanal y extracción de información | Sistema | Llamada / formulario / email / chat | Texto estructurado del caso | IVR · Omnicanal · NLP | **IA**: Extracción automática de entidades (CUPS, fecha, descripción del problema) · **HITL**: Agente corrige si IVR no reconoce el CUPS |
 | A2 | Identificación y validación del cliente | Sistema | NIF · CUPS · Dirección | Cliente validado · Datos contractuales | SAP CRM · SAP IS-U · PUC | **IA**: Validación automática con SAP IS-U y PUC · **HITL**: Intervención si hay ambigüedad en la identidad (< 2 % de casos) |
-| A3 | Clasificación IA extendida: tipología + sub-tipo | Motor IA | Texto del caso · Contexto cliente | Tipología principal + sub-tipo CJ + score de confianza | Motor Clasificación IA | **IA**: Clasificación automática en 18 sub-tipos (ver Tabla Paramétrica de Sub-tipos) · **HITL**: Revisión humana si score < 0,75 |
+| A3 | Clasificación IA extendida: tipología + sub-tipo | Motor IA | Texto del caso · Contexto cliente | Tipología principal + sub-tipo CJ + score de confianza | Motor Clasificación IA | **IA**: Clasificación automática en 20 sub-tipos (ver Tabla Paramétrica de Sub-tipos, sección 3.7) · **HITL**: Revisión humana si score < 0,75 |
 | A4 | Recuperación de contexto técnico enriquecido | Sistema | CUPS · Sub-tipo clasificado | Datos GIS (zona, afectados) · Estado SCADA · Historial WART · Datos PUC | GIS · SCADA · WART · PUC | **IA**: Recuperación automática y enriquecimiento del expediente · **HITL**: ninguna |
 | A5 | Detección de agrupación: ¿incidencia masiva? | Motor IA | Datos GIS · Reclamaciones recientes | Caso individual / Caso agrupado a incidencia maestra | Motor Agrupación | **IA**: Clusterización geoespacial automática · **HITL**: Supervisor valida agrupaciones con > 50 afectados |
 | A6 | Routing paramétrico a una de las 8 rutas | Motor Routing | Sub-tipo + contexto técnico + parámetros | Ruta asignada + unidad operativa receptora + SLA calculado | Motor Routing Paramétrico | **IA**: Selección automática de ruta según tabla paramétrica · **HITL**: Override manual disponible para supervisores |
@@ -205,7 +205,7 @@ Puntos Críticos Generales:
 |---|---|---|---|---|---|---|
 | B1 | Recepción del expediente enriquecido por el dominio competente (Red / Contadores / Contratos / Interrupciones) | Gestor de dominio | Expediente SAP CRM con contexto técnico completo | Caso asignado con toda la información disponible | SAP CRM | **IA**: El gestor recibe el expediente pre-analizado · **HITL**: El gestor revisa y confirma el contexto |
 | B2 | Aplicación de la lógica de flujo específica del dominio (ver ramificaciones de flujo por dominio — sección 3.6) | Gestor / Sistema | Sub-tipo + datos técnicos | Acciones específicas por dominio (creación OT en WART, verificación IS-U, revisión PUC, etc.) | WART · SAP IS-U · PUC · SCADA | **IA**: Propuesta de acciones automáticas según sub-tipo · **HITL**: El gestor aprueba o modifica las acciones propuestas |
-| B3 | Verificación del criterio de cierre (¿es cerrable automáticamente?) | Motor Excepciones | Resultado acciones + criterios "Necesidades generales" | Caso cerrable / Caso con excepción → estado intermedio de suspensión | Motor Excepciones al Cierre | **IA**: Evaluación automática contra el catálogo de excepciones (EXC-01 a EXC-08 para bloqueo de cierre; EXC-09 para incumplimiento normativo de aviso previo en interrupciones programadas) y de estados de suspensión (SUS-01 a SUS-06 según el sub-tipo: p.ej. SUS-04 para CNT-01, SUS-01 para CNT-04 e INT-03, SUS-02 para CTR-02) · **HITL**: Supervisor decide en casos límite o cuando se superponen múltiples códigos EXC |
+| B3 | Verificación del criterio de cierre (¿es cerrable automáticamente?) | Motor Excepciones | Resultado acciones + criterios "Necesidades generales" | Caso cerrable / Caso con excepción → estado intermedio de suspensión | Motor Excepciones al Cierre | **IA**: Evaluación automática contra el catálogo de excepciones (EXC-01 a EXC-09 para bloqueo de cierre; EXC-09 para incumplimiento normativo de aviso previo en interrupciones programadas) y de estados de suspensión (SUS-01 a SUS-06 según el sub-tipo: p.ej. SUS-04 para CNT-01, SUS-01 para CNT-04 e INT-03, SUS-02 para CTR-02) · **HITL**: Supervisor decide en casos límite o cuando se superponen múltiples códigos EXC |
 | B4 | Cierre y generación de comunicación diferenciada, o activación de estado de suspensión con comunicación de seguimiento | Sistema / Gestor | Resultado resolución / Estado suspensión | Expediente cerrado + comunicación final · o Expediente en suspensión + comunicación de seguimiento | SAP CRM · Motor Comunicación | **IA**: Generación automática del template de cierre o suspensión por sub-tipo · **HITL**: Revisión obligatoria antes del envío para sub-tipos con implicaciones legales o compensaciones |
 
 **Tabla 9** (4×7) — TO-BE Subproceso C: Escalación y Casos Especiales
@@ -399,7 +399,9 @@ Los expedientes que no pueden avanzar a resolución ni cerrarse se gestionan med
 [Entrada: sub-tipos Interrupciones]
   ↓
 ¿Sub-tipo = Interrupción Programada?
-  SÍ → Verificar aviso previo enviado en GIS (72 h antes por normativa — Art. 45 RD 1955/2000)
+  SÍ → Verificar aviso previo enviado al cliente (72 h antes por normativa — Art. 45 RD 1955/2000)
+        Nota: los avisos de interrupción programada se registran en WART (orden de trabajo de mantenimiento planificado)
+              y la relación de clientes afectados se obtiene de GIS (zona de influencia de la operación)
         Aviso enviado → Información al cliente + cierre con Template INTERRUPCIÓN PROGRAMADA
         Aviso NO enviado → Activar EXC-09 (incumplimiento normativo de notificación previa) + revisión proceso de avisos
 ¿Sub-tipo = Interrupción No Programada?
@@ -463,7 +465,7 @@ Esta tabla define el **mapping completo** entre sub-tipo de reclamación (identi
 | IVR / Plataforma Omnicanal | Integration Layer | Canal de entrada multicanal (IVR, web, app, email, presencial); entrega del texto de reclamación al Motor de Clasificación IA | Webhook / REST | Existente |
 | Portal Autoconsumo | External System | Gestión de configuración y medición de instalaciones de autoconsumo; verificado para sub-tipo CNT-03 | API REST | **Nuevo en BP v2.0** |
 | SAP PM (Plant Maintenance) | Integration Layer | Gestión de mantenimiento de activos de red; integración con WART para órdenes de mantenimiento preventivo/correctivo | RFC / API | Existente |
-| Motor de Clasificación IA | AI Component | Clasificación multiclase de reclamaciones en 18 sub-tipos; integración con todos los sistemas de contexto | Servicio interno | **Nuevo en BP v2.0** |
+| Motor de Clasificación IA | AI Component | Clasificación multiclase de reclamaciones en 20 sub-tipos (incluido RED-04a/b); integración con todos los sistemas de contexto | Servicio interno | **Nuevo en BP v2.0** |
 | Motor de Routing Paramétrico | AI Component | Selección de ruta óptima entre 8 disponibles; parámetros configurables por Responsable de Proceso | Servicio interno | **Nuevo en BP v2.0** |
 | Motor de Comunicación Diferenciada | AI Component | Generación de templates personalizados por sub-tipo; envío multicanal | Servicio interno + SMTP/SMS | **Nuevo en BP v2.0** |
 
@@ -510,7 +512,7 @@ El módulo de Cierre y Comunicación gestiona el ciclo de vida de las comunicaci
 
 ```
 • Reducción del tiempo medio de clasificación de reclamaciones de 8 minutos (manual) a < 30 segundos (IA automática), con el 78 % de los casos clasificados con score de confianza ≥ 0,75
-• Eliminación del re-routing manual: la tasa de re-clasificación disminuye del 35 % al 8 % gracias a los 19 sub-tipos del modelo extendido (incluido RED-04a/b)
+• Eliminación del re-routing manual: la tasa de re-clasificación disminuye del 35 % al 8 % gracias a los 20 sub-tipos del modelo extendido (RED-01..05 incluyendo RED-04a/b, CNT-01..04, CTR-01..04, INT-01..04, DAÑ-01)
 • Reducción del tiempo de recopilación de contexto técnico por parte del gestor de 15-40 minutos a 0 minutos (recuperación automática de GIS, WART, PUC)
 • Reducción del volumen de expedientes duplicados por incidencias masivas en un 70 % gracias al módulo de agrupación geoespacial
 • Tasa de cierre automático aumentada del 28 % al 65 % para casos estándar; el 35 % restante corresponde a excepciones gestionadas con estados de suspensión formalizados
@@ -562,7 +564,7 @@ La siguiente estimación se basa en el volumen de reclamaciones (120.000/año), 
 
 | Palanca de Ahorro | Cálculo | Ahorro Estimado Anual |
 |---|---|---|
-| Eliminación del re-routing manual (35 % → 8 % de casos) | 27 % × 120.000 casos = 32.400 casos evitados × 2 h gestor × 40 €/h | **2,6 M€** |
+| Eliminación del re-routing manual (35 % → 8 % de casos) | 27 % × 120.000 casos = 32.400 casos evitados × **2 h gestor** (tiempo promedio de re-clasificación + re-asignación + contexto en el nuevo equipo, basado en estimación operativa GRIDS ES a validar en F6) × 40 €/h | **≈ 2,6 M€** |
 | Reducción del tiempo de contexto técnico por caso (20 min → 0) | 120.000 casos × 20 min / 60 × 40 €/h | **1,6 M€** |
 | Reducción de contactos de seguimiento por comunicaciones genéricas | 20 % reducción de llamadas de seguimiento × 30.000 llamadas/año × 5 min × 40 €/h | **0,2 M€** |
 | Compensaciones regulatorias evitadas por cierre correcto (RD 1955/2000) | Estimación conservadora: 5 % menos de compensaciones por cortes > 24 h correctamente gestionados × valor medio compensación 200 € × 2.000 casos/año | **0,2 M€** |
@@ -582,7 +584,7 @@ La siguiente estimación se basa en el volumen de reclamaciones (120.000/año), 
 
 | Fase | Objetivo | Entregable | Duración Estimada |
 |---|---|---|---|
-| F1 — Fundamentos IA y Datos | Preparar el dataset histórico de reclamaciones y entrenar el modelo de clasificación extendido (18 sub-tipos) | Modelo IA clasificación v1.0 validado · Dataset etiquetado con 18 sub-tipos | 6 semanas |
+| F1 — Fundamentos IA y Datos | Preparar el dataset histórico de reclamaciones y entrenar el modelo de clasificación extendido (20 sub-tipos) | Modelo IA clasificación v1.0 validado · Dataset etiquetado con 20 sub-tipos | 6 semanas |
 | F2 — Motor de Routing Paramétrico | Implementar el Motor de Routing con las 8 rutas y la tabla paramétrica configurable | Motor Routing Paramétrico deployado · Tabla de parámetros configurada y validada por Responsables de Proceso | 4 semanas |
 | F3 — Integración WART, PUC y RECORE | Desarrollar y certificar las integraciones con los sistemas nuevos identificados en los CJ | APIs WART, PUC, RECORE integradas y testeadas · Módulo de Contexto Técnico Enriquecido operativo | 6 semanas |
 | F4 — Excepciones y Estados de Suspensión | Implementar el catálogo de excepciones al cierre y los estados intermedios de suspensión | Motor de Excepciones operativo · 8 códigos EXC + 6 estados SUS implementados y configurados | 4 semanas |
@@ -614,7 +616,7 @@ La siguiente estimación se basa en el volumen de reclamaciones (120.000/año), 
 
 | KPI | Objetivo TO-BE | Método de Medición |
 |---|---|---|
-| Cobertura del modelo de clasificación IA | El modelo cubre el 100 % de los sub-tipos identificados en los CJ (18 sub-tipos) sin categoría "Otro" > 5 % | Monitorización mensual de la distribución de sub-tipos; revisión trimestral del modelo con Responsables de Proceso |
+| Cobertura del modelo de clasificación IA | El modelo cubre el 100 % de los 20 sub-tipos identificados en los CJ sin categoría "Otro" > 5 % | Monitorización mensual de la distribución de sub-tipos; revisión trimestral del modelo con Responsables de Proceso |
 | Cumplimiento de los protocolos de excepciones al cierre | 100 % de los casos EXC-01 a EXC-08 gestionados según protocolo (ningún cierre automático indebido) | Auditoría mensual del 10 % de casos con excepción; revisión de alertas del Motor de Excepciones |
 | Calidad de las comunicaciones diferenciadas | 95 % de los clientes reciben el template correcto correspondiente a su sub-tipo de reclamación | Muestreo mensual de 200 expedientes: verificación de template enviado vs sub-tipo del expediente |
 | Integración y disponibilidad de sistemas nuevos (WART, PUC, RECORE) | SLA de disponibilidad ≥ 99,5 % para las APIs de WART, PUC y RECORE en horario operativo | Monitorización continua en Panel de Monitorización; alertas automáticas por caída de integración |
