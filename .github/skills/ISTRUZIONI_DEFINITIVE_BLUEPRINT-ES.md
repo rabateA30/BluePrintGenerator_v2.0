@@ -1,3 +1,14 @@
+---
+name: blueprint-spanish-instructions
+description: >
+  Istruzioni definitive per la generazione di Blueprint in lingua Spagnola (Español).
+  Usare quando l'utente richiede output in spagnolo. Definisce template ES, struttura
+  documento, regole di accento, checklist lingua e sequenza di generazione obbligatoria.
+  Use when: Spanish blueprint, blueprint español, ES blueprint, lingua spagnola.
+disable-model-invocation: false
+user-invocable: true
+---
+
 # BlueprintGenerator Agent — ISTRUZIONI DEFINITIVE (Español)
 
 > **Attivazione**: queste istruzioni si applicano **ogni volta che l'utente richiede un Blueprint in lingua Spagnola**.
@@ -35,7 +46,7 @@ Tutto il contenuto generato deve essere in **Español correcto** con accenti ort
 | notificacion | notificación ✓ |
 | planificacion | planificación ✓ |
 | verificacion | verificación ✓ |
-| extracion | extracción ✓ |
+| extraccion | extracción ✓ |
 | revision | revisión ✓ |
 | tecnico | técnico ✓ |
 | metodo | método ✓ |
@@ -194,7 +205,7 @@ Puntos Críticos Generales:
 
 **Tabla 5** (7x5):
 
-| Componente | Función | Tecnología/Método | Agente Común | Note |
+| Componente | Función | Tecnología/Método | Agente Común | Nota |
 |---|---|---|---|---|
 | … | … | … | … | … |
 
@@ -325,12 +336,12 @@ Salida:
 
 | # | Nome | Dim. | Colonne |
 |---|---|---|---|
-| Tabla 0 | Roles | 10x3 | Rolo \| Nombre/Unità Org. \| Responsabilidad |
+| Tabla 0 | Roles | 10x3 | Rol \| Nombre/Unidad Org. \| Responsabilidad |
 | Tabla 1 | Sistemas AS-IS | 8x3 | Herramienta AS-IS \| Descripción/Rol \| Tipología |
 | Tabla 2 | AS-IS Secuencia A | 6x6 | Paso \| Actividad \| Actor \| Entrada \| Salida \| Sistemas |
 | Tabla 3 | AS-IS Secuencia B | 5x6 | Paso \| Actividad \| Actor \| Entrada \| Salida \| Sistemas |
 | Tabla 4 | AS-IS Secuencia C | 5x6 | Paso \| Actividad \| Actor \| Entrada \| Salida \| Sistemas |
-| Tabla 5 | Arquitectura Funcional IA | 7x5 | Componente \| Función \| Tecnología/Método \| Agente Común \| Note |
+| Tabla 5 | Arquitectura Funcional IA | 7x5 | Componente \| Función \| Tecnología/Método \| Agente Común \| Nota |
 | Tabla 6 | Mapeo Datos TO-BE | 3x5 | Dato \| Sistema Origen \| Sistema Destino \| Formato \| Nota |
 | Tabla 7 | TO-BE Secuencia A | 7x7 | Paso \| Actividad \| Actor \| Entrada \| Salida \| Sistemas \| IA+HITL |
 | Tabla 8 | TO-BE Secuencia B | 4x7 | idem |
