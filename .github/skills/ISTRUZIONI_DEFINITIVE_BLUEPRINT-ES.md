@@ -334,7 +334,7 @@ Salida:
 
 ## Riepilogo Tabelle — Template 1.5 ES (13 tabelle totali)
 
-| # | Nome | Dim. | Colonne |
+| # | Nombre | Dim. | Columnas |
 |---|---|---|---|
 | Tabla 0 | Roles | 10x3 | Rol \| Nombre/Unidad Org. \| Responsabilidad |
 | Tabla 1 | Sistemas AS-IS | 8x3 | Herramienta AS-IS \| Descripción/Rol \| Tipología |
