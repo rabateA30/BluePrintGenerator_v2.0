@@ -2,6 +2,17 @@
 
 Agente Copilot (Declarative Agent) per la generazione automatica di documenti **Blueprint Enel-GICT** (.docx) a partire da materiali di progetto (PPTX, PDF, DOCX) presenti su SharePoint.
 
+# Prompt di esempio per poter predisporre la generazione del blueprint desiderato:
+
+Partendo dai contenuti della cartella allegata qui [Nome cartella] / al path indicato qui [path dove risiedono i documenti] , basandoti sulle istruzioni del custom agent BlueprintGenerator, genera una blueprint rispettando il template qui allegato 1.5_vacio.docx (Se in spagnolo) 1.5_vuoto.docx (Se in italiano/inglese) e restando fedele alla formattazione ed al design. La blueprint deve essere in [lingua desiderata]
+
+Files necessari da allegare al prompt, direttamente da VS Code con drag-drop:
+BlueprintGenerator.agent.md
+Cartella TEMPLATE (dentro ci sono i due template di riferimento per le lingue)
+cartella "skills" (dentro ci sono due skill rispettivamente per ita/uk (documentation_agent-skills.md)  e spa(ISTRUZIONI_DEFINITIVE_BLUEPRINT-ES.md))
+
+
+
 ---
 
 ## Indice
